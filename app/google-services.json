@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "367953457761",
+    "project_id": "fir-kml-lost-n-found",
+    "storage_bucket": "fir-kml-lost-n-found.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:367953457761:android:e344660f0fb3443db5f020",
+        "android_client_info": {
+          "package_name": "com.example.lostfound"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "367953457761-b8onug9hv807qcdfppigidi512gfujrg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.lostfound",
+            "certificate_hash": "9120576b619a983782f0fe385780c28b725b6eda"
+          }
+        },
+        {
+          "client_id": "367953457761-sohdvc4uahhdfbhgp6qjd8oc3e3j49km.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTGetV1g5hYHKc657T9uP-yako-WElY_Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "367953457761-sohdvc4uahhdfbhgp6qjd8oc3e3j49km.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
