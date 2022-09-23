@@ -26,18 +26,20 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
 
     @Override
     protected void onBindViewHolder(@NonNull LostItemViewHolder holder, int position, @NonNull LostItem lostItem) {
-        holder.itemTypeTextView.setText(lostItem.contactInfo);
-        holder.contactInfoTextView.setText(lostItem.contactInfo);
+        holder.itemTypeTextView.setText(lostItem.itemType);
+        holder.imageUriString.setText(lostItem.imageUriStr);
         holder.timestampTextView.setText(Utility.timeToString(lostItem.timestamp));
+        holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ViewItemActivity.class);
-            intent.putExtra("title", lostItem.contactInfo);
-            intent.putExtra("content", lostItem.contactInfo);
-            String docID = this.getSnapshots().getSnapshot(position).getId();
-            intent.putExtra("docID", docID);
-            context.startActivity(intent);
-        });
+        //holder.itemView.setOnClickListener(v -> {
+        //    Intent intent = new Intent(context, ViewItemActivity.class);
+        //    intent.putExtra("title", lostItem.contactInfo);
+        //    intent.putExtra("content", lostItem.contactInfo);
+        //    String docID = this.getSnapshots().getSnapshot(position).getId();
+        //    intent.putExtra("docID", docID);
+        //    context.startActivity(intent);
+        //});
+        holder.itemView.setOnClickListener(v-> Utility.debug(context));
     }
 
     @NonNull
@@ -48,16 +50,15 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
     }
 
     class LostItemViewHolder extends RecyclerView.ViewHolder {
-        TextView itemTypeTextView, contactInfoTextView, timestampTextView;
-        ImageView itemImage;
+        TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString;
 
         public LostItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            itemTypeTextView = itemView.findViewById(R.id.item_type_text_view);
-            itemImage = itemView.findViewById(R.id.item_image);
-            contactInfoTextView = itemView.findViewById(R.id.contact_info_text_view);
-            timestampTextView = itemView.findViewById(R.id.item_timestamp_text_view);
+            itemTypeTextView = itemView.findViewById(R.id.recycler_unclaimed_item_type_text_view);
+            imageUriString = itemView.findViewById(R.id.recycler_image_uri_string);
+            contactInfoTextView = itemView.findViewById(R.id.recycler_unclaimed_contact_info_text_view);
+            timestampTextView = itemView.findViewById(R.id.recycler_unclaimed_item_timestamp_text_view);
         }
     }
 }

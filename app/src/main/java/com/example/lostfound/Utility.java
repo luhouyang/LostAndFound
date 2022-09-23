@@ -26,4 +26,8 @@ public class Utility {
 
         return new SimpleDateFormat("MM/dd/yyyy").format(timestamp.toDate());
     }
+
+    static void debug(Context context){
+        showToast(context, "Successful");
+    }
 }

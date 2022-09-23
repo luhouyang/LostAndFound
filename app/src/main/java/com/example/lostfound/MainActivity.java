@@ -50,4 +50,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reportItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class)));
+        unclaimedItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class)));
+        itemsYouReportedTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class)));
+        menuBtn.setOnClickListener(v-> showMenu());
+    }
 }

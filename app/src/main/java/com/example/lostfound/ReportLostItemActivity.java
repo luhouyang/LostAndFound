@@ -58,6 +58,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
         imageUriStr = "NO_URI";
 
+        imageUri = null;
+
         itemTypeDropDown.setOnClickListener(v-> showDropDownMenu());
         itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
         lostItemPic.setOnClickListener(view-> choosePicture());
@@ -142,10 +144,14 @@ public class ReportLostItemActivity extends AppCompatActivity {
             return;
         }else{
             LostItem lostItem = new LostItem();
+            lostItem.setItemType(itemType);
             lostItem.setContactInfo(contactInfo);
             lostItem.setTimestamp(timestamp);
-            uploadImageUriToFirestore();
+            if(imageUri!=null){
+                uploadImageUriToFirestore();
+            }
             lostItem.setImageUriStr(imageUriStr);
+
             //DocumentReference documentReference = FirebaseFirestore.getInstance().collection("unclaimed-items").document("Unclaimed-Items").collection(itemType).document();
             DocumentReference documentReference = Utility.getCollectionReferenceUnclaimed(itemType).document();
             documentReference.set(lostItem)

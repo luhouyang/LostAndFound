@@ -3,11 +3,20 @@ package com.example.lostfound;
 import com.google.firebase.Timestamp;
 
 public class LostItem {
+    String itemType;
     String contactInfo;
     String imageUriStr;
     Timestamp timestamp;
 
     public LostItem() {
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 
     public String getContactInfo() {
