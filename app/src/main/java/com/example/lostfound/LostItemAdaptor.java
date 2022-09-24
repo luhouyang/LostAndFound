@@ -38,7 +38,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         holder.imageUriString.setText(lostItem.imageUriStr);
         storageReference = FirebaseStorage.getInstance().getReference(lostItem.imageUriStr);
         try {
-            File localFile = File.createTempFile("tempFile", ".jpg");
+            File localFile = File.createTempFile("image", ".jpg");
             storageReference.getFile(localFile).addOnSuccessListener(v-> {
                 Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
                 holder.imageView.setImageBitmap(bitmap);
