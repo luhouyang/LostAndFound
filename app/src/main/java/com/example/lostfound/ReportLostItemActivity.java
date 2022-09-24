@@ -156,7 +156,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
             documentReference.set(lostItem)
                     .addOnCompleteListener(v-> Utility.showToast(ReportLostItemActivity.this, "Successfully reported item"))
                     .addOnFailureListener(v-> Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage()));
-            //startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
+            startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
             finish();
         }
     }
