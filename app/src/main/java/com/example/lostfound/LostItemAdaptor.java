@@ -1,6 +1,7 @@
 package com.example.lostfound;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ import java.io.IOException;
 
 public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItemAdaptor.LostItemViewHolder> {
     Context context;
+    String localFilePath;
 
     StorageReference storageReference;
 
@@ -40,7 +42,8 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         try {
             File localFile = File.createTempFile("image", ".jpg");
             storageReference.getFile(localFile).addOnSuccessListener(v-> {
-                Bitmap bitmap = BitmapFactory.decodeFile(localFile.getAbsolutePath());
+                localFilePath = localFile.getAbsolutePath();
+                Bitmap bitmap = BitmapFactory.decodeFile(localFilePath);
                 holder.imageView.setImageBitmap(bitmap);
             });
         } catch (IOException e) {
@@ -50,15 +53,18 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         holder.timestampTextView.setText(Utility.timeToString(lostItem.timestamp));
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        //holder.itemView.setOnClickListener(v -> {
-        //    Intent intent = new Intent(context, ViewItemActivity.class);
-        //    intent.putExtra("title", lostItem.contactInfo);
-        //    intent.putExtra("content", lostItem.contactInfo);
-        //    String docID = this.getSnapshots().getSnapshot(position).getId();
-        //    intent.putExtra("docID", docID);
-        //    context.startActivity(intent);
-        //});
-        holder.itemView.setOnClickListener(v-> Utility.debug(context));
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(context, ViewLostItemActivity.class);
+            intent.putExtra("itemType", lostItem.itemType);
+            intent.putExtra("imageUriStr", lostItem.imageUriStr);
+            intent.putExtra("localFilePath", localFilePath);
+            intent.putExtra("timestamp", Utility.timeToString(lostItem.timestamp));
+            intent.putExtra("contactInfo", lostItem.contactInfo);
+            String docID = this.getSnapshots().getSnapshot(position).getId();
+            intent.putExtra("docID", docID);
+            context.startActivity(intent);
+        });
+        //holder.itemView.setOnClickListener(v-> Utility.debug(context));
     }
 
     @NonNull

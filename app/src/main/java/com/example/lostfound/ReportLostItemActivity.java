@@ -170,6 +170,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
             contactInfoEditText.setError("No contact info");
             return false;
         }
+        if(imageUri==null){
+            uploadPhotoTextView.setError("No photo");
+            return false;
+        }
         return true;
     }
 }
