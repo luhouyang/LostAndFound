@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
@@ -63,7 +62,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
         itemTypeDropDown.setOnClickListener(v-> showDropDownMenu());
         itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
         lostItemPic.setOnClickListener(view-> choosePicture());
-        //uploadPhotoTextView.setOnClickListener(v-> uploadImageUriToFirestore());
         reportItemBtnTextView.setOnClickListener(v-> addLostItemToDatabase());
     }
 
@@ -101,15 +99,15 @@ public class ReportLostItemActivity extends AppCompatActivity {
         }
     }
 
-    void uploadImageUriToFirestore(){
+    void uploadImageUriToFirestore(String itemType){
 
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image...");
         pd.show();
 
         final String randomKey = UUID.randomUUID().toString();
-        StorageReference pictureStorageRef = storageReference.child("image/" + randomKey);
-        imageUriStr = pictureStorageRef.toString();
+        StorageReference pictureStorageRef = storageReference.child("image/" + itemType + "/" + randomKey);
+        imageUriStr = "image/" + itemType + "/" + randomKey;
         pictureStorageRef.putFile(imageUri)
                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -147,15 +145,18 @@ public class ReportLostItemActivity extends AppCompatActivity {
             lostItem.setItemType(itemType);
             lostItem.setContactInfo(contactInfo);
             lostItem.setTimestamp(timestamp);
+
+            //Image upload
             if(imageUri!=null){
-                uploadImageUriToFirestore();
+                uploadImageUriToFirestore(itemType);
             }
             lostItem.setImageUriStr(imageUriStr);
 
-            //DocumentReference documentReference = FirebaseFirestore.getInstance().collection("unclaimed-items").document("Unclaimed-Items").collection(itemType).document();
             DocumentReference documentReference = Utility.getCollectionReferenceUnclaimed(itemType).document();
             documentReference.set(lostItem)
-                    .addOnCompleteListener(v-> Utility.showToast(ReportLostItemActivity.this, "Successfully reported item"));
+                    .addOnCompleteListener(v-> Utility.showToast(ReportLostItemActivity.this, "Successfully reported item"))
+                    .addOnFailureListener(v-> Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage()));
+            //startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
             finish();
         }
     }

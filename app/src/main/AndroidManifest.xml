@@ -3,6 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.lostfound">
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"
@@ -15,10 +17,14 @@
         android:theme="@style/Theme.LostFound"
         tools:targetApi="31">
         <activity
-            android:name=".UnclaimedItemActivity"
-            android:exported="false" />
+            android:name=".ViewLostItemActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
-            android:name=".ViewItemActivity"
+            android:name=".UnclaimedItemActivity"
             android:exported="false" />
         <activity
             android:name=".ItemsYouReportedActivity"

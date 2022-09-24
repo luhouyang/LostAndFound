@@ -26,9 +26,18 @@ public class MainActivity extends AppCompatActivity {
         itemsYouReportedTextView = findViewById(R.id.items_you_reported_text_view);
         menuBtn = findViewById(R.id.menu_btn);
 
-        reportItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class)));
-        unclaimedItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class)));
-        itemsYouReportedTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class)));
+        reportItemTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class));
+            //finish();
+        });
+        unclaimedItemTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
+            //finish();
+        });
+        itemsYouReportedTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class));
+            //finish();
+        });
         menuBtn.setOnClickListener(v-> showMenu());
     }
 
@@ -54,9 +63,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        reportItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class)));
-        unclaimedItemTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class)));
-        itemsYouReportedTextView.setOnClickListener(v-> startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class)));
+        reportItemTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class));
+            //finish();
+        });
+        unclaimedItemTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
+            //finish();
+        });
+        itemsYouReportedTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class));
+            //finish();
+        });
         menuBtn.setOnClickListener(v-> showMenu());
     }
 }

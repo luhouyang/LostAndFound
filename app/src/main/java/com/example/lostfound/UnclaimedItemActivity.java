@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -30,7 +31,7 @@ public class UnclaimedItemActivity extends AppCompatActivity {
 
         itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
         itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
-        setUpRecyclerView();
+        setUpRecyclerView("Place-Holder");
     }
 
     void showDropDownMenu(){
@@ -41,18 +42,26 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
                 itemTypeTextView.setText("Bottles");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Bottles");
+                lostItemAdaptor.startListening();
+                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Calculators");
+                lostItemAdaptor.startListening();
+                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             return false;
         });
     }
 
-    void setUpRecyclerView(){
-        Query query = Utility.getCollectionReferenceUnclaimed("Bottles").orderBy("timestamp", Query.Direction.DESCENDING);
+    void setUpRecyclerView(String itemType){
+        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestamp", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
