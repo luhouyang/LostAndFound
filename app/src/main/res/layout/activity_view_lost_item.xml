@@ -11,69 +11,171 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_lost_item_type_text_view"
-            android:text="lost item type"
-            android:textSize="40dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@color/teal_200"
-            />
+            android:id="@+id/view_lost_item_layout"
+            android:visibility="visible">
 
-        <TextView
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_lost_item_type_text_view"
+                android:text="lost item type"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_lost_image_uri_string"
+                android:text="image URI"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/view_lost_item_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginVertical="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_lost_item_timestamp_text_view"
+                android:text="timestamp"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:background="@color/dark_blue_grey"
+                />
+
+            <TextView
+                android:id="@+id/view_lost_contact_info_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blueish_grey"
+                android:ellipsize="end"
+                android:minLines="10"
+                android:text="contact info"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_lost_item_type_text_view"
+                android:text="CLAIM THIS ITEM"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                android:layout_marginVertical="4dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/view_lost_image_uri_string"
-            android:text="image URI"
-            android:textSize="12dp"
-            android:textColor="@color/black"
-            android:visibility="gone"
-            />
+            android:id="@+id/claim_lost_item_layout"
+            android:visibility="visible">
 
-        <ImageView
-            android:id="@+id/view_lost_item_image_view"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginVertical="4dp"
-            />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/cancel_claim_lost_item_text_view"
+                android:text="CANCEL CLAIM ITEM"
+                android:textSize="36dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                android:padding="2dp"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/view_lost_item_timestamp_text_view"
-            android:text="timestamp"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:background="@color/dark_blue_grey"
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_matrix_number_edit_text"
+                android:inputType="textShortMessage"
+                android:hint="Enter Matrix Number"
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/view_lost_contact_info_text_view"
-            android:text="contact info"
-            android:textSize="16dp"
-            android:textColor="@color/black"
-            android:minLines="10"
-            android:ellipsize="end"
-            android:background="@color/blueish_grey"
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_name_edit_text"
+                android:inputType="textShortMessage"
+                android:hint="Enter Name"
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/claim_lost_item_type_text_view"
-            android:text="CLAIM THIS ITEM"
-            android:textSize="40dp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:background="@color/teal_200"
-            android:layout_marginVertical="4dp"
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_tutorial_edit_text"
+                android:inputType="textShortMessage"
+                android:hint="Enter Class/Tutorial"
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_email_edit_text"
+                android:inputType="textEmailAddress"
+                android:hint="Enter Email"
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_item_description_edit_text"
+                android:inputType="none"
+                android:hint="When/Where you lost it."
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/confirm_claim_lost_item_text_view"
+                android:text="CONFIRM CLAIM"
+                android:textSize="38dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                android:layout_marginVertical="8dp"
+                />
+
+        </LinearLayout>
 
     </LinearLayout>
 
