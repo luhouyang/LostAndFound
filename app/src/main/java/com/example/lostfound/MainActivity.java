@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         reportItemTextView = findViewById(R.id.report_lost_items_text_view);
         unclaimedItemTextView = findViewById(R.id.unclaimed_items_text_view);
         itemsYouReportedTextView = findViewById(R.id.items_you_reported_text_view);
-        menuBtn = findViewById(R.id.menu_btn);
+        menuBtn = findViewById(R.id.main_menu_btn);
 
         reportItemTextView.setOnClickListener(v-> {
             startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class));
@@ -32,10 +32,6 @@ public class MainActivity extends AppCompatActivity {
         });
         unclaimedItemTextView.setOnClickListener(v-> {
             startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
-            //finish();
-        });
-        itemsYouReportedTextView.setOnClickListener(v-> {
-            startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class));
             //finish();
         });
         menuBtn.setOnClickListener(v-> showMenu());
@@ -69,10 +65,6 @@ public class MainActivity extends AppCompatActivity {
         });
         unclaimedItemTextView.setOnClickListener(v-> {
             startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
-            //finish();
-        });
-        itemsYouReportedTextView.setOnClickListener(v-> {
-            startActivity(new Intent(MainActivity.this, ItemsYouReportedActivity.class));
             //finish();
         });
         menuBtn.setOnClickListener(v-> showMenu());

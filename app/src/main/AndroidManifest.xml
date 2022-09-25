@@ -23,9 +23,6 @@
             android:name=".ViewLostItemActivity"
             android:exported="false" />
         <activity
-            android:name=".ItemsYouReportedActivity"
-            android:exported="false" />
-        <activity
             android:name=".ReportLostItemActivity"
             android:exported="false" />
         <activity

@@ -8,5 +8,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="peach">#FFE699</color>
     <color name="black">#FF000000</color>
+    <color name="dark_blue_grey">#9595B6</color>
+    <color name="blueish_grey">#ACBBEA</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

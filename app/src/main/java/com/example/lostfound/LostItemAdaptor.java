@@ -36,7 +36,6 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
     @Override
     protected void onBindViewHolder(@NonNull LostItemViewHolder holder, int position, @NonNull LostItem lostItem) {
         holder.itemTypeTextView.setText(lostItem.itemType);
-
         holder.imageUriString.setText(lostItem.imageUriStr);
         storageReference = FirebaseStorage.getInstance().getReference(lostItem.imageUriStr);
         try {
@@ -49,7 +48,6 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         holder.timestampTextView.setText(Utility.timeToString(lostItem.timestamp));
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 

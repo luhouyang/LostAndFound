@@ -11,7 +11,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/menu_layout"
+        android:id="@+id/main_menu_layout"
         android:orientation="horizontal"
         android:gravity="center">
 
@@ -27,7 +27,7 @@
         <ImageButton
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:id="@+id/menu_btn"
+            android:id="@+id/main_menu_btn"
             android:src="@drawable/ic_baseline_menu_24"
             android:background="@color/teal_700"
             android:layout_margin="8dp"
@@ -38,13 +38,14 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/menu_layout"
+        android:layout_below="@+id/main_menu_layout"
         android:layout_marginTop="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
