@@ -55,17 +55,4 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        reportItemTextView.setOnClickListener(v-> {
-            startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class));
-            //finish();
-        });
-        unclaimedItemTextView.setOnClickListener(v-> {
-            startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
-            //finish();
-        });
-        menuBtn.setOnClickListener(v-> showMenu());
-    }
 }
