@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
 
         reportItemTextView = findViewById(R.id.report_lost_items_text_view);
         unclaimedItemTextView = findViewById(R.id.unclaimed_items_text_view);
-        itemsYouReportedTextView = findViewById(R.id.items_you_reported_text_view);
         menuBtn = findViewById(R.id.main_menu_btn);
 
         reportItemTextView.setOnClickListener(v-> {
