@@ -13,18 +13,25 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+import java.util.regex.Pattern;
+
 public class LoginActivity extends AppCompatActivity {
 
-    EditText emailEditText, passwordEditText;
+    EditText nameEditText, matrixNoEditText, emailEditText, passwordEditText;
     Button loginBtn;
     TextView signUpTextViewBtn;
     ProgressBar progressBar;
+
+    private Pattern p = Pattern.compile("MS[0-9]{10}");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        nameEditText = findViewById(R.id.login_name_edit_text);
+        matrixNoEditText = findViewById(R.id.login_matrix_no_edit_text);
         emailEditText = findViewById(R.id.login_email_edit_text);
         passwordEditText = findViewById(R.id.login_password_edit_text);
         loginBtn = findViewById(R.id.login_btn);
@@ -39,10 +46,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void loginUser(){
+        String name  = nameEditText.getText().toString();
+        String matrixNo = matrixNoEditText.getText().toString();
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
 
-        if(!correctLoginInfo(email, password)){
+        if(!correctLoginInfo(name, matrixNo, email, password)){
             return;
         }
 
@@ -66,7 +75,15 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    boolean correctLoginInfo(String email, String password){
+    boolean correctLoginInfo(String name, String matrixNo, String email, String password){
+        //if(Objects.equals(name, "")){
+        //    nameEditText.setError("Enter name");
+        //    return false;
+        //}
+        //if(!p.matcher(matrixNo).matches()){
+        //    matrixNoEditText.setError("Enter matrix number");
+        //    return false;
+        //}
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             emailEditText.setError("Email is invalid");
             return false;

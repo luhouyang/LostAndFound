@@ -1,7 +1,9 @@
 package com.example.lostfound;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -11,6 +13,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ViewLostItemActivity extends AppCompatActivity {
 
@@ -23,15 +37,18 @@ public class ViewLostItemActivity extends AppCompatActivity {
     //variables for claiming item
     LinearLayout claimItemLayout;
     TextView cancelClaimTextView, confirmClaimTextView;
-    EditText matrixNumberEditText, nameEditText, tutorialEditText, emailEditText, itemDetailEditText;
+    EditText matrixNumberEditText, nameEditText, tutorialEditText, emailEditText, itemDetailEditText, approxPriceEditText;
 
     //general variables
+    private FirebaseUser currentUser;
     private String itemType, imageUriStr,localFilePath, timestamp, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_lost_item);
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //defining viewing item variables
         viewItemLayout = findViewById(R.id.view_lost_item_layout);
@@ -51,6 +68,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         tutorialEditText = findViewById(R.id.claim_tutorial_edit_text);
         emailEditText = findViewById(R.id.claim_email_edit_text);
         itemDetailEditText = findViewById(R.id.claim_item_description_edit_text);
+        approxPriceEditText = findViewById(R.id.claim_item_price_edit_text);
 
         //display viewing info
         itemType = getIntent().getStringExtra("itemType");
@@ -76,6 +94,21 @@ public class ViewLostItemActivity extends AppCompatActivity {
         cancelClaimTextView.setOnClickListener(v-> {
             viewItemLayout.setVisibility(viewItemLayout.VISIBLE);
             claimItemLayout.setVisibility(claimItemLayout.GONE);
+        });
+
+        confirmClaimTextView.setOnClickListener(v-> {
+            DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
+            reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    String nameOfClaimer = documentSnapshot.getString("name");
+                    String matrixNoOfClaimer = documentSnapshot.getString("matrixNo");
+                    DocumentReference docRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
+                    docRef.update("nameOfClaimer", nameOfClaimer);
+                    docRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
+                    Utility.showToast(ViewLostItemActivity.this, "Success");
+                }
+            });
         });
     }
 }

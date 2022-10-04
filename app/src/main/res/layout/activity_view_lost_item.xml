@@ -162,6 +162,18 @@
                 android:layout_marginTop="8dp"
                 />
 
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/claim_item_price_edit_text"
+                android:inputType="none"
+                android:hint="Approximate price."
+                android:textSize="20sp"
+                android:background="@drawable/rounded_corner"
+                android:padding="16dp"
+                android:layout_marginTop="8dp"
+                />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
