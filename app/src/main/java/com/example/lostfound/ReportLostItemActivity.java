@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.media.MediaCodec;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.EditText;
@@ -24,14 +23,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -42,7 +39,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
     EditText contactInfoEditText;
     TextView itemTypeTextView, reportItemBtnTextView, uploadPhotoTextView;
     ImageView lostItemPic;
-    Timestamp timestamp;
+    Timestamp timestampReported;
 
     private FirebaseStorage firebaseStorage;
     private StorageReference storageReference;
@@ -148,7 +145,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
     void addLostItemToDatabase(){
         String itemType = itemTypeTextView.getText().toString();
         String contactInfo = contactInfoEditText.getText().toString();
-        this.timestamp = Timestamp.now();
+        this.timestampReported = Timestamp.now();
 
         if(!checkInformation(itemType, contactInfo)){
             return;
@@ -166,7 +163,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     lostItem.setMatrixNoOfReporter(matrixNoOfReporter);
                     lostItem.setItemType(itemType);
                     lostItem.setContactInfo(contactInfo);
-                    lostItem.setTimestamp(timestamp);
+                    lostItem.setTimestampReported(timestampReported);
 
                     //Image upload
                     if(imageUri!=null){
@@ -194,10 +191,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
             contactInfoEditText.setError("No contact info");
             return false;
         }
-        //if(imageUri==null){
-        //    uploadPhotoTextView.setError("No photo");
-        //    return false;
-        //}
+        if(imageUri==null){
+            uploadPhotoTextView.setError("No photo");
+            return false;
+        }
         return true;
     }
 }

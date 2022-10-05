@@ -48,7 +48,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         } catch (IOException e) {
             e.printStackTrace();
         }
-        holder.timestampTextView.setText(Utility.timeToString(lostItem.timestamp));
+        holder.timestampTextView.setText(Utility.timeToString(lostItem.timestampReported));
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
         holder.itemView.setOnClickListener(v -> {
@@ -56,7 +56,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
             intent.putExtra("itemType", lostItem.itemType);
             intent.putExtra("imageUriStr", lostItem.imageUriStr);
             intent.putExtra("localFilePath", localFilePath);
-            intent.putExtra("timestamp", Utility.timeToString(lostItem.timestamp));
+            intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
             intent.putExtra("contactInfo", lostItem.contactInfo);
             String docID = this.getSnapshots().getSnapshot(position).getId();
             intent.putExtra("docID", docID);

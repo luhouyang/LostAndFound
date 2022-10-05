@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -37,11 +38,12 @@ public class ViewLostItemActivity extends AppCompatActivity {
     //variables for claiming item
     LinearLayout claimItemLayout;
     TextView cancelClaimTextView, confirmClaimTextView;
-    EditText matrixNumberEditText, nameEditText, tutorialEditText, emailEditText, itemDetailEditText, approxPriceEditText;
+    EditText matrixNumberEditText, nameEditText, tutorialEditText, emailEditText, itemDetailEditText, estimatePriceEditText;
+    Timestamp timestampClaimed;
 
     //general variables
     private FirebaseUser currentUser;
-    private String itemType, imageUriStr,localFilePath, timestamp, contactInfo, docID;
+    private String itemType, imageUriStr,localFilePath, timestampReported, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,13 +70,14 @@ public class ViewLostItemActivity extends AppCompatActivity {
         tutorialEditText = findViewById(R.id.claim_tutorial_edit_text);
         emailEditText = findViewById(R.id.claim_email_edit_text);
         itemDetailEditText = findViewById(R.id.claim_item_description_edit_text);
-        approxPriceEditText = findViewById(R.id.claim_item_price_edit_text);
+        estimatePriceEditText = findViewById(R.id.claim_item_price_edit_text);
+        timestampClaimed = Timestamp.now();
 
         //display viewing info
         itemType = getIntent().getStringExtra("itemType");
         imageUriStr = getIntent().getStringExtra("imageUriStr");
         localFilePath = getIntent().getStringExtra("localFilePath");
-        timestamp = getIntent().getStringExtra("timestamp");
+        timestampReported = getIntent().getStringExtra("timestampReported");
         contactInfo = getIntent().getStringExtra("contactInfo");
         docID = getIntent().getStringExtra("docID");
 
@@ -83,7 +86,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         itemTypeTextView.setText(itemType);
         imageUriStrTextView.setText(imageUriStr);
         imageView.setImageBitmap(bitmap);
-        timestampTextView.setText(timestamp);
+        timestampTextView.setText(timestampReported);
         contactInfoTextView.setText(contactInfo);
 
         //functions and buttons
@@ -106,6 +109,8 @@ public class ViewLostItemActivity extends AppCompatActivity {
                     DocumentReference docRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
                     docRef.update("nameOfClaimer", nameOfClaimer);
                     docRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
+                    docRef.update("timestampClaimed", timestampClaimed);
+                    docRef.update("estimatePrice", estimatePriceEditText.getText().toString());
                     Utility.showToast(ViewLostItemActivity.this, "Success");
                 }
             });

@@ -167,7 +167,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/claim_item_price_edit_text"
                 android:inputType="none"
-                android:hint="Approximate price."
+                android:hint="Estimated price of item."
                 android:textSize="20sp"
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"

@@ -3,14 +3,19 @@ package com.example.lostfound;
 import com.google.firebase.Timestamp;
 
 public class LostItem {
+    //reporting
     String nameOfReporter;
     String matrixNoOfReporter;
-    String nameOfClaimer;
-    String matrixNoOfClaimer;
     String itemType;
     String contactInfo;
     String imageUriStr;
-    Timestamp timestamp;
+    Timestamp timestampReported;
+
+    //claiming
+    String nameOfClaimer;
+    String matrixNoOfClaimer;
+    String estimatePrice;
+    Timestamp timestampClaimed;
 
     public LostItem() {
     }
@@ -71,11 +76,27 @@ public class LostItem {
         this.imageUriStr = imageUriStr;
     }
 
-    public Timestamp getTimestamp() {
-        return timestamp;
+    public Timestamp getTimestampReported() {
+        return timestampReported;
     }
 
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+    public void setTimestampReported(Timestamp timestampReported) {
+        this.timestampReported = timestampReported;
+    }
+
+    public Timestamp getTimestampClaimed() {
+        return timestampClaimed;
+    }
+
+    public void setTimestampClaimed(Timestamp timestampClaimed) {
+        this.timestampClaimed = timestampClaimed;
+    }
+
+    public String getEstimatePrice() {
+        return estimatePrice;
+    }
+
+    public void setEstimatePrice(String estimatePrice) {
+        this.estimatePrice = estimatePrice;
     }
 }

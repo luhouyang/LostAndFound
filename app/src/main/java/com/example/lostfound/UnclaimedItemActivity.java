@@ -61,7 +61,7 @@ public class UnclaimedItemActivity extends AppCompatActivity {
     }
 
     void setUpRecyclerView(String itemType){
-        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestamp", Query.Direction.DESCENDING);
+        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
