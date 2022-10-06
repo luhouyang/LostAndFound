@@ -38,6 +38,8 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         PopupMenu popupMenu = new PopupMenu(UnclaimedItemActivity.this, itemTypeDropDownBtn);
         popupMenu.getMenu().add("Bottles");
         popupMenu.getMenu().add("Calculators");
+        popupMenu.getMenu().add("Bags");
+        popupMenu.getMenu().add("Electronic Devices");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
@@ -52,6 +54,22 @@ public class UnclaimedItemActivity extends AppCompatActivity {
                 itemTypeTextView.setText("Calculators");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Calculators");
+                lostItemAdaptor.startListening();
+                lostItemAdaptor.notifyDataSetChanged();
+                return true;
+            }
+            if(menuItem.getTitle()=="Bags"){
+                itemTypeTextView.setText("Bags");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Bags");
+                lostItemAdaptor.startListening();
+                lostItemAdaptor.notifyDataSetChanged();
+                return true;
+            }
+            if(menuItem.getTitle()=="Electronic Devices"){
+                itemTypeTextView.setText("Electronic Devices");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Electronic Devices");
                 lostItemAdaptor.startListening();
                 lostItemAdaptor.notifyDataSetChanged();
                 return true;

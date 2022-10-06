@@ -102,6 +102,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
         PopupMenu popupMenu = new PopupMenu(ReportLostItemActivity.this, itemTypeDropDown);
         popupMenu.getMenu().add("Bottles");
         popupMenu.getMenu().add("Calculators");
+        popupMenu.getMenu().add("Bags");
+        popupMenu.getMenu().add("Electronic Devices");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
@@ -110,6 +112,14 @@ public class ReportLostItemActivity extends AppCompatActivity {
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
+                return true;
+            }
+            if(menuItem.getTitle()=="Bags"){
+                itemTypeTextView.setText("Bags");
+                return true;
+            }
+            if(menuItem.getTitle()=="Electronic Devices"){
+                itemTypeTextView.setText("Electronic Devices");
                 return true;
             }
             return false;
@@ -205,10 +215,13 @@ public class ReportLostItemActivity extends AppCompatActivity {
                                 credits += 1;
                                 reporterDataDocRef.update("credits", credits);
                                 Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
+                                finish();
                             })
-                            .addOnFailureListener(v-> Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage()));
+                            .addOnFailureListener(v-> {
+                                Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage());
+                                finish();
+                            });
                     startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
-                    finish();
                 }
             });
         }

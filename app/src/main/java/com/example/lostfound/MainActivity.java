@@ -13,7 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
 
-    TextView reportItemTextView, unclaimedItemTextView, itemsYouReportedTextView;
+    TextView reportItemTextView, unclaimedItemTextView, claimedItemTextView;
     ImageButton menuBtn;
 
     @Override
@@ -23,15 +23,17 @@ public class MainActivity extends AppCompatActivity {
 
         reportItemTextView = findViewById(R.id.report_lost_items_text_view);
         unclaimedItemTextView = findViewById(R.id.unclaimed_items_text_view);
+        claimedItemTextView = findViewById(R.id.claimed_items_text_view);
         menuBtn = findViewById(R.id.main_menu_btn);
 
         reportItemTextView.setOnClickListener(v-> {
             startActivity(new Intent(MainActivity.this, ReportLostItemActivity.class));
-            //finish();
         });
         unclaimedItemTextView.setOnClickListener(v-> {
             startActivity(new Intent(MainActivity.this, UnclaimedItemActivity.class));
-            //finish();
+        });
+        claimedItemTextView.setOnClickListener(v-> {
+            startActivity(new Intent(MainActivity.this, ClaimedItemActivity.class));
         });
         menuBtn.setOnClickListener(v-> showMenu());
     }
