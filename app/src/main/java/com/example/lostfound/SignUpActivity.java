@@ -29,6 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressBar progressBar;
 
     private Pattern p = Pattern.compile("MS[0-9]{10}");
+    private int credits = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,7 @@ public class SignUpActivity extends AppCompatActivity {
                 UserData userData = new UserData();
                 userData.setName(name);
                 userData.setMatrixNo(matrixNo);
+                userData.setCredits(credits);
                 DocumentReference documentReference = Utility.getDocumentReferenceUserData(currentUser);
                 documentReference.set(userData).addOnCompleteListener(SignUpActivity.this, v-> {
                     Utility.showToast(SignUpActivity.this, "Successfully added");

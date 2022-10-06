@@ -76,14 +76,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     boolean correctLoginInfo(String name, String matrixNo, String email, String password){
-        //if(Objects.equals(name, "")){
-        //    nameEditText.setError("Enter name");
-        //    return false;
-        //}
-        //if(!p.matcher(matrixNo).matches()){
-        //    matrixNoEditText.setError("Enter matrix number");
-        //    return false;
-        //}
+        if(Objects.equals(name, "")){
+            nameEditText.setError("Enter name");
+            return false;
+        }
+        if(!p.matcher(matrixNo).matches()){
+            matrixNoEditText.setError("Enter matrix number");
+            return false;
+        }
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             emailEditText.setError("Email is invalid");
             return false;
