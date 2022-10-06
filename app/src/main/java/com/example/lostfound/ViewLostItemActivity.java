@@ -43,6 +43,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
 
     //general variables
     private FirebaseUser currentUser;
+    private FirebaseFirestore firebaseFirestore;
     private String itemType, imageUriStr,localFilePath, timestampReported, contactInfo, docID;
 
     @Override
@@ -51,6 +52,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_lost_item);
 
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
         //defining viewing item variables
         viewItemLayout = findViewById(R.id.view_lost_item_layout);
@@ -103,15 +105,38 @@ public class ViewLostItemActivity extends AppCompatActivity {
             DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
             reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
-                    String nameOfClaimer = documentSnapshot.getString("name");
-                    String matrixNoOfClaimer = documentSnapshot.getString("matrixNo");
-                    DocumentReference docRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
-                    docRef.update("nameOfClaimer", nameOfClaimer);
-                    docRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
-                    docRef.update("timestampClaimed", timestampClaimed);
-                    docRef.update("estimatePrice", estimatePriceEditText.getText().toString());
-                    Utility.showToast(ViewLostItemActivity.this, "Success");
+                public void onEvent(@Nullable DocumentSnapshot unclaimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    //update details of claimer
+                    String nameOfClaimer = unclaimedDocumentSnapshot.getString("name");
+                    String matrixNoOfClaimer = unclaimedDocumentSnapshot.getString("matrixNo");
+                    DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
+                    unclaimedDocRef.update("nameOfClaimer", nameOfClaimer);
+                    unclaimedDocRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
+                    unclaimedDocRef.update("timestampClaimed", timestampClaimed);
+                    unclaimedDocRef.update("estimatePrice", estimatePriceEditText.getText().toString());
+                    Utility.showToast(ViewLostItemActivity.this, "Successfully claimed");
+                }
+            });
+
+            //move data of item to claimed collection
+            Utility.getCollectionReferenceClaimed(itemType).document(docID);
+            DocumentReference claimedDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
+            DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
+            unclaimedDocRef.addSnapshotListener(ViewLostItemActivity.this, new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(@Nullable DocumentSnapshot claimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    LostItem claimedItemDetails = new LostItem();
+                    claimedItemDetails.setContactInfo(claimedDocumentSnapshot.getString("contactInfo"));
+                    claimedItemDetails.setEstimatePrice(claimedDocumentSnapshot.getString("estimatePrice"));
+                    claimedItemDetails.setImageUriStr(claimedDocumentSnapshot.getString("imageUriStr"));
+                    claimedItemDetails.setItemType(claimedDocumentSnapshot.getString("itemType"));
+                    claimedItemDetails.setMatrixNoOfClaimer(claimedDocumentSnapshot.getString("matrixNoOfClaimer"));
+                    claimedItemDetails.setMatrixNoOfReporter(claimedDocumentSnapshot.getString("matrixNoOfReporter"));
+                    claimedItemDetails.setNameOfClaimer(claimedDocumentSnapshot.getString("nameOfClaimer"));
+                    claimedItemDetails.setNameOfReporter(claimedDocumentSnapshot.getString("nameOfReporter"));
+                    claimedItemDetails.setTimestampClaimed(claimedDocumentSnapshot.getTimestamp("timestampClaimed"));
+                    claimedItemDetails.setTimestampReported(claimedDocumentSnapshot.getTimestamp("timestampClaimed"));
+                    claimedDocRef.set(claimedItemDetails);
                 }
             });
         });

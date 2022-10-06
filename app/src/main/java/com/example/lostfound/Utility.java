@@ -29,10 +29,17 @@ public class Utility {
                 .collection(itemType);
     }
 
+    static CollectionReference getCollectionReferenceClaimed(String itemType){
+        return FirebaseFirestore
+                .getInstance()
+                .collection("claimed-items")
+                .document("Claimed-Items")
+                .collection(itemType);
+    }
+
     static DocumentReference getDocumentReferenceUserData(FirebaseUser currentUser){
         return FirebaseFirestore.getInstance().collection("user-data").document(currentUser.getUid());
     }
-
 
     static String timeToString(Timestamp timestamp){
 

@@ -92,7 +92,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
                 chooseImage(ReportLostItemActivity.this);
             }
         });
-        reportItemBtnTextView.setOnClickListener(v-> addLostItemToDatabase());
+        reportItemBtnTextView.setOnClickListener(v-> {
+            reportItemBtnTextView.setOnClickListener(null);
+            addLostItemToDatabase();
+        });
     }
 
     void showDropDownMenu(){
@@ -130,7 +133,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
     //}
 
     void uploadImageUriToFirestore(String itemType){
-
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setTitle("Uploading Image...");
         pd.show();
@@ -169,6 +171,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
         this.timestampReported = Timestamp.now();
 
         if(!checkInformation(itemType, contactInfo)){
+            reportItemBtnTextView.setOnClickListener(v-> {
+                reportItemBtnTextView.setOnClickListener(null);
+                addLostItemToDatabase();
+            });
             return;
         }else{
             DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
@@ -197,9 +203,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                             .addOnCompleteListener(v-> {
                                 int credits = documentSnapshot.getLong("credits").intValue();
                                 credits += 1;
-                                Map<String, Integer> newCredits = new HashMap<>();
-                                newCredits.put("credits", credits);
-                                reporterDataDocRef.set(newCredits);
+                                reporterDataDocRef.update("credits", credits);
                                 Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
                             })
                             .addOnFailureListener(v-> Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage()));
