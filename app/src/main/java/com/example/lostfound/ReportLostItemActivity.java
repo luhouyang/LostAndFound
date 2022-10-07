@@ -43,9 +43,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -104,6 +102,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         popupMenu.getMenu().add("Calculators");
         popupMenu.getMenu().add("Bags");
         popupMenu.getMenu().add("Electronic Devices");
+        popupMenu.getMenu().add("Miscellaneous");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
@@ -120,6 +119,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
             }
             if(menuItem.getTitle()=="Electronic Devices"){
                 itemTypeTextView.setText("Electronic Devices");
+                return true;
+            }
+            if(menuItem.getTitle()=="Miscellaneous"){
+                itemTypeTextView.setText("Miscellaneous");
                 return true;
             }
             return false;
@@ -242,8 +245,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
         }
         return true;
     }
-
-
     
     // function to let's the user to choose image from camera or gallery
     private void chooseImage(Context context){
@@ -271,6 +272,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
     // function to check permission
     public static boolean checkAndRequestPermissions(final Activity context) {
         int WExtstorePermission = ContextCompat.checkSelfPermission(context,
@@ -293,6 +295,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         }
         return true;
     }
+
     // Handled permission Result
     @Override
     public void onRequestPermissionsResult(int requestCode,String[] permissions, int[] grantResults) {
@@ -315,6 +318,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -324,8 +328,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     if (resultCode == RESULT_OK && data != null) {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         lostItemPic.setImageBitmap(selectedImage);
-                        imageUri = data.getData();
-                        lostItemPic.setImageURI(imageUri);
+                        imageUri = Utility.getImageUri(this, selectedImage);
+                        //lostItemPic.setImageURI(imageUri);
                     }
                     break;
                 case 1:
@@ -343,7 +347,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                             }
                         }
                         imageUri = data.getData();
-                        lostItemPic.setImageURI(imageUri);
+                        //lostItemPic.setImageURI(imageUri);
                     }
                     break;
             }

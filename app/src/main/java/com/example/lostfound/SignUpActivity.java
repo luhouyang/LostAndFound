@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
     TextView loginButtonTextView;
     ProgressBar progressBar;
 
-    private Pattern p = Pattern.compile("MS[0-9]{10}");
+    private Pattern p = Pattern.compile("[A-Z]{2}[0-9]{10}");
     private int credits = 0;
 
     @Override

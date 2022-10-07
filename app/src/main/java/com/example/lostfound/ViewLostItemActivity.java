@@ -60,7 +60,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         imageUriStrTextView = findViewById(R.id.view_lost_image_uri_string);
         timestampTextView = findViewById(R.id.view_lost_item_timestamp_text_view);
         contactInfoTextView = findViewById(R.id.view_lost_contact_info_text_view);
-        claimItemTextView = findViewById(R.id.claim_lost_item_type_text_view);
+        claimItemTextView = findViewById(R.id.claim_lost_item_text_view);
         imageView =  findViewById(R.id.view_lost_item_image_view);
 
         //defining claim item variables
@@ -139,6 +139,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
                     claimedDocRef.set(claimedItemDetails);
                 }
             });
+            finish();
         });
     }
 }

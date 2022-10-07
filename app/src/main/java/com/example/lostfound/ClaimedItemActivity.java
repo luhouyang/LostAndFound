@@ -17,7 +17,7 @@ public class ClaimedItemActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     TextView itemTypeTextView;
     ImageButton itemTypeDropDownBtn;
-    LostItemAdaptor lostItemAdaptor;
+    ClaimedItemAdaptor claimedItemAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,38 +39,47 @@ public class ClaimedItemActivity extends AppCompatActivity {
         popupMenu.getMenu().add("Calculators");
         popupMenu.getMenu().add("Bags");
         popupMenu.getMenu().add("Electronic Devices");
+        popupMenu.getMenu().add("Miscellaneous");
         popupMenu.show();
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
                 itemTypeTextView.setText("Bottles");
-                lostItemAdaptor.stopListening();
+                claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Bottles");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
+                claimedItemAdaptor.startListening();
+                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
-                lostItemAdaptor.stopListening();
+                claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Calculators");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
+                claimedItemAdaptor.startListening();
+                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Bags"){
                 itemTypeTextView.setText("Bags");
-                lostItemAdaptor.stopListening();
+                claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Bags");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
+                claimedItemAdaptor.startListening();
+                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Electronic Devices"){
                 itemTypeTextView.setText("Electronic Devices");
-                lostItemAdaptor.stopListening();
+                claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Electronic Devices");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
+                claimedItemAdaptor.startListening();
+                claimedItemAdaptor.notifyDataSetChanged();
+                return true;
+            }
+            if(menuItem.getTitle()=="Miscellaneous"){
+                itemTypeTextView.setText("Miscellaneous");
+                claimedItemAdaptor.stopListening();
+                setUpRecyclerView("Miscellaneous");
+                claimedItemAdaptor.startListening();
+                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             return false;
@@ -82,25 +91,25 @@ public class ClaimedItemActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        lostItemAdaptor = new LostItemAdaptor(options, this);
-        recyclerView.setAdapter(lostItemAdaptor);
+        claimedItemAdaptor = new ClaimedItemAdaptor(options, this);
+        recyclerView.setAdapter(claimedItemAdaptor);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        lostItemAdaptor.startListening();
+        claimedItemAdaptor.startListening();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        lostItemAdaptor.stopListening();
+        claimedItemAdaptor.stopListening();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        lostItemAdaptor.notifyDataSetChanged();
+        claimedItemAdaptor.notifyDataSetChanged();
     }
 }

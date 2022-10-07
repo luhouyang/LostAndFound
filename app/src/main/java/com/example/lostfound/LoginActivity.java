@@ -23,7 +23,7 @@ public class LoginActivity extends AppCompatActivity {
     TextView signUpTextViewBtn;
     ProgressBar progressBar;
 
-    private Pattern p = Pattern.compile("MS[0-9]{10}");
+    private Pattern p = Pattern.compile("[A-Z]{2}[0-9]{10}");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
