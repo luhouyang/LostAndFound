@@ -2,6 +2,8 @@ package com.example.lostfound;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -36,6 +38,26 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, ClaimedItemActivity.class));
         });
         menuBtn.setOnClickListener(v-> showMenu());
+    }
+
+    @Override
+    public void onBackPressed(){
+        final CharSequence[] optionsMenu = {"Close App", "Return"}; // create a menuOption Array
+        // create a dialog for showing the optionsMenu
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // set the items in builder
+        builder.setItems(optionsMenu, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                if(optionsMenu[i].equals("Close App")){
+                    finish();
+                }
+                else if (optionsMenu[i].equals("Return")) {
+                    dialogInterface.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     void showMenu(){

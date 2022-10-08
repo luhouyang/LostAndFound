@@ -84,6 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
                     Utility.showToast(SignUpActivity.this, "Successfully added");
                     currentUser.sendEmailVerification();
                     firebaseAuth.signOut();
+                    startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
                     finish();
                 });
            }else{
