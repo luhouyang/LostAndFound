@@ -16,7 +16,7 @@ import com.google.firebase.firestore.Query;
 public class UnclaimedItemActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    TextView itemTypeTextView;
+    TextView itemTypeClickableTextView, itemTypeTextView;
     ImageButton itemTypeDropDownBtn;
     LostItemAdaptor lostItemAdaptor;
 
@@ -26,11 +26,13 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_unclaimed_item);
 
         recyclerView = findViewById(R.id.recycler_view);
+        itemTypeClickableTextView = findViewById(R.id.unclaimed_item_type_clickable_text_view);
         itemTypeTextView = findViewById(R.id.unclaimed_item_type_text_view);
         itemTypeDropDownBtn = findViewById(R.id.unclaimed_item_type_drop_down);
 
-        itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
-        itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
+        itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
         setUpRecyclerView("Place-Holder");
     }
 

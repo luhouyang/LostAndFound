@@ -113,6 +113,7 @@
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 />
 
             <EditText
@@ -125,6 +126,7 @@
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 />
 
             <EditText

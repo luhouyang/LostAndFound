@@ -20,6 +20,8 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -53,7 +55,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
     ImageButton itemTypeDropDown;
     EditText contactInfoEditText;
-    TextView itemTypeTextView, reportItemBtnTextView, uploadPhotoTextView;
+    TextView itemTypeClickableTextView, itemTypeTextView, reportItemBtnTextView, uploadPhotoTextView;
     ImageView lostItemPic;
     Timestamp timestampReported;
 
@@ -70,6 +72,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
         itemTypeDropDown = findViewById(R.id.item_type_drop_down);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
+        itemTypeClickableTextView = findViewById(R.id.item_type_clickable_text_view);
         itemTypeTextView = findViewById(R.id.item_type_text_view);
         reportItemBtnTextView = findViewById(R.id.report_item_button_text_view);
         uploadPhotoTextView = findViewById(R.id.upload_photo_text_view);
@@ -82,8 +85,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
         imageUri = null;
 
-        itemTypeDropDown.setOnClickListener(v-> showDropDownMenu());
-        itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
+        itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeDropDown.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
+
         //lostItemPic.setOnClickListener(view-> choosePicture());
         lostItemPic.setOnClickListener(v-> {
             if(checkAndRequestPermissions(ReportLostItemActivity.this)){

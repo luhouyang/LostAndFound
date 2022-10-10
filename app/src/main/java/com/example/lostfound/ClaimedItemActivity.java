@@ -15,7 +15,7 @@ import com.google.firebase.firestore.Query;
 public class ClaimedItemActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
-    TextView itemTypeTextView;
+    TextView itemTypeClickableTextView, itemTypeTextView;
     ImageButton itemTypeDropDownBtn;
     ClaimedItemAdaptor claimedItemAdaptor;
 
@@ -25,11 +25,13 @@ public class ClaimedItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_claimed_item);
 
         recyclerView = findViewById(R.id.recycler_view);
+        itemTypeClickableTextView = findViewById(R.id.claimed_item_type_clickable_text_view);
         itemTypeTextView = findViewById(R.id.claimed_item_type_text_view);
         itemTypeDropDownBtn = findViewById(R.id.claimed_item_type_drop_down);
 
-        itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
-        itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
+        itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
+        //itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
         setUpRecyclerView("Place-Holder");
     }
 

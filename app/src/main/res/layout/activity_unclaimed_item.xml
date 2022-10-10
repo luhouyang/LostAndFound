@@ -18,6 +18,15 @@
         android:gravity="center"
         />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/unclaimed_item_type_clickable_text_view"
+        android:layout_below="@+id/unclaimed_items_title_text_view"
+        android:textSize="36dp"
+        android:layout_marginVertical="8dp"
+        android:padding="8dp"/>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
