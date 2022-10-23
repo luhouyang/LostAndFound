@@ -58,6 +58,17 @@
                 />
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_claimed_item_place_text_view"
+                android:text="loaction"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:background="@color/dark_blue_grey"
+                />
+
+
+            <TextView
                 android:id="@+id/view_claimed_contact_info_text_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -113,6 +124,7 @@
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 />
 
             <EditText
@@ -149,6 +161,7 @@
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 />
 
             <EditText
@@ -161,6 +174,7 @@
                 android:background="@drawable/rounded_corner"
                 android:padding="16dp"
                 android:layout_marginTop="8dp"
+                android:visibility="gone"
                 />
 
             <EditText

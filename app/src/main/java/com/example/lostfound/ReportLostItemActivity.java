@@ -54,7 +54,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
     public Uri imageUri;
 
     ImageButton itemTypeDropDown;
-    EditText contactInfoEditText;
+    EditText contactInfoEditText, placeEditText;
     TextView itemTypeClickableTextView, itemTypeTextView, reportItemBtnTextView, uploadPhotoTextView;
     ImageView lostItemPic;
     Timestamp timestampReported;
@@ -64,6 +64,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
     private StorageReference storageReference;
     private FirebaseUser currentUser;
     private String imageUriStr;
+    private boolean clicked;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +75,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         itemTypeClickableTextView = findViewById(R.id.item_type_clickable_text_view);
         itemTypeTextView = findViewById(R.id.item_type_text_view);
+        placeEditText = findViewById(R.id.place_edit_text);
         reportItemBtnTextView = findViewById(R.id.report_item_button_text_view);
         uploadPhotoTextView = findViewById(R.id.upload_photo_text_view);
         lostItemPic = findViewById(R.id.lost_item_pic);
@@ -82,6 +84,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         storageReference = firebaseStorage.getReference();
         currentUser = FirebaseAuth.getInstance().getCurrentUser();
         imageUriStr = "NO_URI";
+        clicked = false;
 
         imageUri = null;
 
@@ -96,8 +99,10 @@ public class ReportLostItemActivity extends AppCompatActivity {
             }
         });
         reportItemBtnTextView.setOnClickListener(v-> {
-            reportItemBtnTextView.setOnClickListener(null);
-            addLostItemToDatabase();
+            if (!clicked){
+                clicked = true;
+                addLostItemToDatabase();
+            }
         });
     }
 
@@ -186,13 +191,11 @@ public class ReportLostItemActivity extends AppCompatActivity {
     void addLostItemToDatabase(){
         String itemType = itemTypeTextView.getText().toString();
         String contactInfo = contactInfoEditText.getText().toString();
+        String place = placeEditText.getText().toString();
         this.timestampReported = Timestamp.now();
 
-        if(!checkInformation(itemType, contactInfo)){
-            reportItemBtnTextView.setOnClickListener(v-> {
-                reportItemBtnTextView.setOnClickListener(null);
-                addLostItemToDatabase();
-            });
+        if(!checkInformation(itemType, place)){
+            clicked = false;
             return;
         }else{
             DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
@@ -209,6 +212,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     lostItem.setItemType(itemType);
                     lostItem.setContactInfo(contactInfo);
                     lostItem.setTimestampReported(timestampReported);
+                    lostItem.setPlace(place);
+                    lostItem.setStatus("unclaimed");
 
                     //Image upload
                     if(imageUri!=null){
@@ -235,13 +240,13 @@ public class ReportLostItemActivity extends AppCompatActivity {
         }
     }
 
-    boolean checkInformation(String itemType, String contactInfo){
+    boolean checkInformation(String itemType, String place){
         if(Objects.equals(itemType, "Item Type")){
             itemTypeTextView.setError("No item type selected");
             return false;
         }
-        if(Objects.equals(contactInfo, "")){
-            contactInfoEditText.setError("No contact info");
+        if(Objects.equals(place, "")){
+            placeEditText.setError("No location");
             return false;
         }
         if(imageUri==null){

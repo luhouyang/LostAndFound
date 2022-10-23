@@ -1,6 +1,5 @@
 package com.example.lostfound;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -15,16 +14,13 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class ViewClaimedItemActivity extends AppCompatActivity {
 
     //variables for viewing claimed item
     LinearLayout viewItemLayout;
-    TextView itemTypeTextView, imageUriStrTextView, timestampTextView, contactInfoTextView, claimItemTextView;
+    TextView itemTypeTextView, imageUriStrTextView, timestampTextView, placeTextView, contactInfoTextView, claimItemTextView;
     ImageView imageView;
     Bitmap bitmap;
 
@@ -37,7 +33,7 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
     //general variables
     private FirebaseUser currentUser;
     private FirebaseFirestore firebaseFirestore;
-    private String itemType, imageUriStr,localFilePath, timestampReported, contactInfo, docID;
+    private String itemType, imageUriStr,localFilePath, timestampReported, place, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +48,7 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         itemTypeTextView = findViewById(R.id.view_claimed_item_type_text_view);
         imageUriStrTextView = findViewById(R.id.view_claimed_image_uri_string);
         timestampTextView = findViewById(R.id.view_claimed_item_timestamp_text_view);
+        placeTextView = findViewById(R.id.view_claimed_item_place_text_view);
         contactInfoTextView = findViewById(R.id.view_claimed_contact_info_text_view);
         claimItemTextView = findViewById(R.id.report_claimed_item_text_view);
         imageView =  findViewById(R.id.view_claimed_item_image_view);
@@ -73,6 +70,7 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         imageUriStr = getIntent().getStringExtra("imageUriStr");
         localFilePath = getIntent().getStringExtra("localFilePath");
         timestampReported = getIntent().getStringExtra("timestampReported");
+        place = getIntent().getStringExtra("place");
         contactInfo = getIntent().getStringExtra("contactInfo");
         docID = getIntent().getStringExtra("docID");
 
@@ -82,6 +80,7 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         imageUriStrTextView.setText(imageUriStr);
         imageView.setImageBitmap(bitmap);
         timestampTextView.setText(timestampReported);
+        placeTextView.setText(place);
         contactInfoTextView.setText(contactInfo);
 
         //functions and buttons
@@ -95,7 +94,10 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         });
 
         confirmReportTextView.setOnClickListener(v-> {
-            Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
+            DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
+            claimedItemDocRef.update("status", "reported").addOnSuccessListener(q-> {
+                Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
+            });
             finish();
         });
     }

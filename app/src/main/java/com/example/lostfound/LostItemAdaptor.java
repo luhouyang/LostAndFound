@@ -49,6 +49,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
             e.printStackTrace();
         }
         holder.timestampTextView.setText(Utility.timeToString(lostItem.timestampReported));
+        holder.placeTextView.setText(lostItem.place);
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
         holder.itemView.setOnClickListener(v -> {
@@ -57,6 +58,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
             intent.putExtra("imageUriStr", lostItem.imageUriStr);
             intent.putExtra("localFilePath", localFilePath);
             intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
+            intent.putExtra("place", lostItem.place);
             intent.putExtra("contactInfo", lostItem.contactInfo);
             String docID = this.getSnapshots().getSnapshot(position).getId();
             intent.putExtra("docID", docID);
@@ -73,7 +75,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
     }
 
     class LostItemViewHolder extends RecyclerView.ViewHolder {
-        TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString;
+        TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString, placeTextView;
         ImageView imageView;
 
         public LostItemViewHolder(@NonNull View itemView) {
@@ -84,6 +86,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
             imageView = itemView.findViewById(R.id.unclaimed_item_image_view);
             contactInfoTextView = itemView.findViewById(R.id.recycler_unclaimed_contact_info_text_view);
             timestampTextView = itemView.findViewById(R.id.recycler_unclaimed_item_timestamp_text_view);
+            placeTextView = itemView.findViewById(R.id.recycler_unclaimed_place_text_view);
         }
     }
 }

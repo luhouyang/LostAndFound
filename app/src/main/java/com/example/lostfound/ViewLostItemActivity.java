@@ -31,7 +31,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
 
     //variables for viewing item
     LinearLayout viewItemLayout;
-    TextView itemTypeTextView, imageUriStrTextView, timestampTextView, contactInfoTextView, claimItemTextView;
+    TextView itemTypeTextView, imageUriStrTextView, timestampTextView, placeTextView, contactInfoTextView, claimItemTextView;
     ImageView imageView;
     Bitmap bitmap;
 
@@ -44,7 +44,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
     //general variables
     private FirebaseUser currentUser;
     private FirebaseFirestore firebaseFirestore;
-    private String itemType, imageUriStr,localFilePath, timestampReported, contactInfo, docID;
+    private String itemType, imageUriStr,localFilePath, timestampReported, place, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         itemTypeTextView = findViewById(R.id.view_lost_item_type_text_view);
         imageUriStrTextView = findViewById(R.id.view_lost_image_uri_string);
         timestampTextView = findViewById(R.id.view_lost_item_timestamp_text_view);
+        placeTextView = findViewById(R.id.view_lost_item_place_text_view);
         contactInfoTextView = findViewById(R.id.view_lost_contact_info_text_view);
         claimItemTextView = findViewById(R.id.claim_lost_item_text_view);
         imageView =  findViewById(R.id.view_lost_item_image_view);
@@ -80,6 +81,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         imageUriStr = getIntent().getStringExtra("imageUriStr");
         localFilePath = getIntent().getStringExtra("localFilePath");
         timestampReported = getIntent().getStringExtra("timestampReported");
+        place = getIntent().getStringExtra("place");
         contactInfo = getIntent().getStringExtra("contactInfo");
         docID = getIntent().getStringExtra("docID");
 
@@ -89,6 +91,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
         imageUriStrTextView.setText(imageUriStr);
         imageView.setImageBitmap(bitmap);
         timestampTextView.setText(timestampReported);
+        placeTextView.setText(place);
         contactInfoTextView.setText(contactInfo);
 
         //functions and buttons
@@ -102,44 +105,67 @@ public class ViewLostItemActivity extends AppCompatActivity {
         });
 
         confirmClaimTextView.setOnClickListener(v-> {
-            DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
-            reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot unclaimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
-                    //update details of claimer
-                    String nameOfClaimer = unclaimedDocumentSnapshot.getString("name");
-                    String matrixNoOfClaimer = unclaimedDocumentSnapshot.getString("matrixNo");
-                    DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
-                    unclaimedDocRef.update("nameOfClaimer", nameOfClaimer);
-                    unclaimedDocRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
-                    unclaimedDocRef.update("timestampClaimed", timestampClaimed);
-                    unclaimedDocRef.update("estimatePrice", estimatePriceEditText.getText().toString());
-                    Utility.showToast(ViewLostItemActivity.this, "Successfully claimed");
-                }
-            });
+            if (!isValid(nameEditText.getText().toString(), tutorialEditText.getText().toString(), estimatePriceEditText.getText().toString())){
+                DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
+                reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot unclaimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
+                        //update details of claimer
+                        String nameOfClaimer = unclaimedDocumentSnapshot.getString("name");
+                        String matrixNoOfClaimer = unclaimedDocumentSnapshot.getString("matrixNo");
+                        DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
+                        unclaimedDocRef.update("nameOfClaimer", nameOfClaimer);
+                        unclaimedDocRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
+                        unclaimedDocRef.update("timestampClaimed", timestampClaimed);
+                        unclaimedDocRef.update("estimatePrice", estimatePriceEditText.getText().toString());
+                        unclaimedDocRef.update("status", "claimed");
+                        Utility.showToast(ViewLostItemActivity.this, "Successfully claimed");
+                    }
+                });
 
-            //move data of item to claimed collection
-            Utility.getCollectionReferenceClaimed(itemType).document(docID);
-            DocumentReference claimedDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
-            DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
-            unclaimedDocRef.addSnapshotListener(ViewLostItemActivity.this, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot claimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
-                    LostItem claimedItemDetails = new LostItem();
-                    claimedItemDetails.setContactInfo(claimedDocumentSnapshot.getString("contactInfo"));
-                    claimedItemDetails.setEstimatePrice(claimedDocumentSnapshot.getString("estimatePrice"));
-                    claimedItemDetails.setImageUriStr(claimedDocumentSnapshot.getString("imageUriStr"));
-                    claimedItemDetails.setItemType(claimedDocumentSnapshot.getString("itemType"));
-                    claimedItemDetails.setMatrixNoOfClaimer(claimedDocumentSnapshot.getString("matrixNoOfClaimer"));
-                    claimedItemDetails.setMatrixNoOfReporter(claimedDocumentSnapshot.getString("matrixNoOfReporter"));
-                    claimedItemDetails.setNameOfClaimer(claimedDocumentSnapshot.getString("nameOfClaimer"));
-                    claimedItemDetails.setNameOfReporter(claimedDocumentSnapshot.getString("nameOfReporter"));
-                    claimedItemDetails.setTimestampClaimed(claimedDocumentSnapshot.getTimestamp("timestampClaimed"));
-                    claimedItemDetails.setTimestampReported(claimedDocumentSnapshot.getTimestamp("timestampClaimed"));
-                    claimedDocRef.set(claimedItemDetails);
-                }
-            });
-            finish();
+                //move data of item to claimed collection
+                Utility.getCollectionReferenceClaimed(itemType).document(docID);
+                DocumentReference claimedDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
+                DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
+                unclaimedDocRef.addSnapshotListener(ViewLostItemActivity.this, new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot unclaimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
+                        LostItem claimedItemDetails = new LostItem();
+                        claimedItemDetails.setContactInfo(unclaimedDocumentSnapshot.getString("contactInfo"));
+                        claimedItemDetails.setEstimatePrice(unclaimedDocumentSnapshot.getString("estimatePrice"));
+                        claimedItemDetails.setImageUriStr(unclaimedDocumentSnapshot.getString("imageUriStr"));
+                        claimedItemDetails.setItemType(unclaimedDocumentSnapshot.getString("itemType"));
+                        claimedItemDetails.setMatrixNoOfClaimer(unclaimedDocumentSnapshot.getString("matrixNoOfClaimer"));
+                        claimedItemDetails.setMatrixNoOfReporter(unclaimedDocumentSnapshot.getString("matrixNoOfReporter"));
+                        claimedItemDetails.setNameOfClaimer(unclaimedDocumentSnapshot.getString("nameOfClaimer"));
+                        claimedItemDetails.setNameOfReporter(unclaimedDocumentSnapshot.getString("nameOfReporter"));
+                        claimedItemDetails.setTimestampClaimed(unclaimedDocumentSnapshot.getTimestamp("timestampClaimed"));
+                        claimedItemDetails.setTimestampReported(unclaimedDocumentSnapshot.getTimestamp("timestampClaimed"));
+                        claimedItemDetails.setPlace(unclaimedDocumentSnapshot.getString("place"));
+                        claimedItemDetails.setStatus(unclaimedDocumentSnapshot.getString("status"));
+                        claimedDocRef.set(claimedItemDetails).addOnSuccessListener(v-> {
+                            unclaimedDocRef.delete();
+                        });
+                    }
+                });
+                finish();
+            }
         });
+    }
+
+    boolean isValid(String name, String tutorial, String price){
+        if(Objects.equals(name, "")){
+            nameEditText.setError("Enter name");
+            return false;
+        }
+        if(Objects.equals(tutorial, "")){
+            tutorialEditText.setError("No location");
+            return false;
+        }
+        if(Objects.equals(price, "")){
+            estimatePriceEditText.setError("Enter approx. price");
+            return false;
+        }
+        return true;
     }
 }

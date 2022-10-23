@@ -9,12 +9,14 @@ public class LostItem {
     String itemType;
     String contactInfo;
     String imageUriStr;
+    String place;
     Timestamp timestampReported;
 
     //claiming
     String nameOfClaimer;
     String matrixNoOfClaimer;
     String estimatePrice;
+    String status;
     Timestamp timestampClaimed;
 
     public LostItem() {
@@ -98,5 +100,21 @@ public class LostItem {
 
     public void setEstimatePrice(String estimatePrice) {
         this.estimatePrice = estimatePrice;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 }
