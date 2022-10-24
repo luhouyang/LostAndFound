@@ -3,6 +3,10 @@ package com.example.lostfound;
 import com.google.firebase.Timestamp;
 
 public class LostItem {
+
+    //general
+    String status;
+
     //reporting
     String nameOfReporter;
     String matrixNoOfReporter;
@@ -16,10 +20,24 @@ public class LostItem {
     String nameOfClaimer;
     String matrixNoOfClaimer;
     String estimatePrice;
-    String status;
     Timestamp timestampClaimed;
 
+    //complain
+    String nameOfComplain;
+    String matrixNoOfComplain;
+    String tutorialComplain;
+    String complainPrice;
+    Timestamp timestampComplained;
+
     public LostItem() {
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getNameOfReporter() {
@@ -102,19 +120,51 @@ public class LostItem {
         this.estimatePrice = estimatePrice;
     }
 
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getPlace() {
         return place;
     }
 
     public void setPlace(String place) {
         this.place = place;
+    }
+
+    public String getNameOfComplain() {
+        return nameOfComplain;
+    }
+
+    public void setNameOfComplain(String nameOfComplain) {
+        this.nameOfComplain = nameOfComplain;
+    }
+
+    public String getMatrixNoOfComplain() {
+        return matrixNoOfComplain;
+    }
+
+    public void setMatrixNoOfComplain(String matrixNoOfComplain) {
+        this.matrixNoOfComplain = matrixNoOfComplain;
+    }
+
+    public String getTutorialComplain() {
+        return tutorialComplain;
+    }
+
+    public void setTutorialComplain(String tutorialComplain) {
+        this.tutorialComplain = tutorialComplain;
+    }
+
+    public String getComplainPrice() {
+        return complainPrice;
+    }
+
+    public void setComplainPrice(String complainPrice) {
+        this.complainPrice = complainPrice;
+    }
+
+    public Timestamp getTimestampComplained() {
+        return timestampComplained;
+    }
+
+    public void setTimestampComplained(Timestamp timestampComplained) {
+        this.timestampComplained = timestampComplained;
     }
 }

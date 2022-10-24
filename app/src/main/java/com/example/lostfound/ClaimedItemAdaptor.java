@@ -8,9 +8,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
@@ -64,6 +66,10 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
             intent.putExtra("docID", docID);
             context.startActivity(intent);
         });
+        if (lostItem.status.equals("reported")){
+            int red = ContextCompat.getColor(this.context, R.color.red_bright);
+            holder.linearLayout.setBackgroundColor(red);
+        }
         //holder.itemView.setOnClickListener(v-> Utility.debug(context));
     }
 
@@ -75,12 +81,14 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
     }
 
     class ClaimedItemViewHolder extends RecyclerView.ViewHolder {
+        LinearLayout linearLayout;
         TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString, placeTextView;
         ImageView imageView;
 
         public ClaimedItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            linearLayout = itemView.findViewById(R.id.recycler_linear_layout);
             itemTypeTextView = itemView.findViewById(R.id.recycler_unclaimed_item_type_text_view);
             imageUriString = itemView.findViewById(R.id.recycler_image_uri_string);
             imageView = itemView.findViewById(R.id.unclaimed_item_image_view);

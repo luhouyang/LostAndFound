@@ -105,14 +105,14 @@ public class ViewLostItemActivity extends AppCompatActivity {
         });
 
         confirmClaimTextView.setOnClickListener(v-> {
-            if (!isValid(nameEditText.getText().toString(), tutorialEditText.getText().toString(), estimatePriceEditText.getText().toString())){
-                DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
-                reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            if (isValid(nameEditText.getText().toString(), tutorialEditText.getText().toString(), estimatePriceEditText.getText().toString())){
+                DocumentReference claimerDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
+                claimerDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                     @Override
-                    public void onEvent(@Nullable DocumentSnapshot unclaimedDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
+                    public void onEvent(@Nullable DocumentSnapshot claimerDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
                         //update details of claimer
-                        String nameOfClaimer = unclaimedDocumentSnapshot.getString("name");
-                        String matrixNoOfClaimer = unclaimedDocumentSnapshot.getString("matrixNo");
+                        String nameOfClaimer = claimerDocumentSnapshot.getString("name");
+                        String matrixNoOfClaimer = claimerDocumentSnapshot.getString("matrixNo");
                         DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
                         unclaimedDocRef.update("nameOfClaimer", nameOfClaimer);
                         unclaimedDocRef.update("matrixNoOfClaimer", matrixNoOfClaimer);

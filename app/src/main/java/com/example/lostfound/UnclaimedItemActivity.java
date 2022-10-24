@@ -1,6 +1,7 @@
 package com.example.lostfound;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -95,7 +96,7 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);;
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         lostItemAdaptor = new LostItemAdaptor(options, this);
         recyclerView.setAdapter(lostItemAdaptor);
     }

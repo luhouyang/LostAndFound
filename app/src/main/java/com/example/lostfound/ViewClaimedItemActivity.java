@@ -1,5 +1,6 @@
 package com.example.lostfound;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -14,7 +15,12 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+
+import java.util.Objects;
 
 public class ViewClaimedItemActivity extends AppCompatActivity {
 
@@ -94,11 +100,42 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         });
 
         confirmReportTextView.setOnClickListener(v-> {
-            DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
-            claimedItemDocRef.update("status", "reported").addOnSuccessListener(q-> {
-                Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
-            });
-            finish();
+            String tutorial = tutorialEditText.getText().toString();
+            String price = estimatePriceEditText.getText().toString();
+            if (isValid(nameEditText.getText().toString(), tutorial, price)) {
+                DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
+                claimedItemDocRef.update("status", "reported").addOnSuccessListener(q -> {
+                    DocumentReference complainUserData = Utility.getDocumentReferenceUserData(currentUser);
+                    complainUserData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
+                            claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));
+                            claimedItemDocRef.update("matrixNoOfComplain", complainUserDataSnapshot.getString("matrixNo"));
+                            claimedItemDocRef.update("complainPrice", price);
+                            claimedItemDocRef.update("tutorialComplain", tutorial);
+                            claimedItemDocRef.update("timestampComplained", timestampReportClaimed);
+                            Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
+                        }
+                    });
+                });
+                finish();
+            }
         });
+    }
+
+    boolean isValid(String name, String tutorial, String price){
+        if(Objects.equals(name, "")){
+            nameEditText.setError("Enter name");
+            return false;
+        }
+        if(Objects.equals(tutorial, "")){
+            tutorialEditText.setError("No location");
+            return false;
+        }
+        if(Objects.equals(price, "")){
+            estimatePriceEditText.setError("Enter approx. price");
+            return false;
+        }
+        return true;
     }
 }
