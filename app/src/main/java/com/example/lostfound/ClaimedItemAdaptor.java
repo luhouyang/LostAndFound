@@ -23,16 +23,21 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, ClaimedItemAdaptor.ClaimedItemViewHolder> {
     Context context;
     String localFilePath;
+    String key;
+    boolean adminView;
 
     StorageReference storageReference;
 
-    public ClaimedItemAdaptor(@NonNull FirestoreRecyclerOptions<LostItem> options, Context context) {
+    public ClaimedItemAdaptor(@NonNull FirestoreRecyclerOptions<LostItem> options, Context context, String key, boolean adminView) {
         super(options);
         this.context = context;
+        this.key = key;
+        this.adminView = adminView;
     }
 
     @Override
@@ -54,21 +59,36 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
         holder.placeTextView.setText(lostItem.place);
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        holder.itemView.setOnClickListener(v -> {
-            Intent intent = new Intent(context, ViewClaimedItemActivity.class);
-            intent.putExtra("itemType", lostItem.itemType);
-            intent.putExtra("imageUriStr", lostItem.imageUriStr);
-            intent.putExtra("localFilePath", localFilePath);
-            intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
-            intent.putExtra("place", lostItem.place);
-            intent.putExtra("contactInfo", lostItem.contactInfo);
-            String docID = this.getSnapshots().getSnapshot(position).getId();
-            intent.putExtra("docID", docID);
-            context.startActivity(intent);
-        });
         if (lostItem.status.equals("reported")){
             int red = ContextCompat.getColor(this.context, R.color.red_bright);
             holder.linearLayout.setBackgroundColor(red);
+            if (Objects.equals(this.key, "admin") && this.adminView){
+                holder.itemView.setOnClickListener(v -> {
+                    Intent intent = new Intent(context, ViewClaimedItemActivity.class);
+                    intent.putExtra("itemType", lostItem.itemType);
+                    intent.putExtra("imageUriStr", lostItem.imageUriStr);
+                    intent.putExtra("localFilePath", localFilePath);
+                    intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
+                    intent.putExtra("place", lostItem.place);
+                    intent.putExtra("contactInfo", lostItem.contactInfo);
+                    String docID = this.getSnapshots().getSnapshot(position).getId();
+                    intent.putExtra("docID", docID);
+                    context.startActivity(intent);
+                });
+            }
+        }else{
+            holder.itemView.setOnClickListener(v -> {
+                Intent intent = new Intent(context, ViewClaimedItemActivity.class);
+                intent.putExtra("itemType", lostItem.itemType);
+                intent.putExtra("imageUriStr", lostItem.imageUriStr);
+                intent.putExtra("localFilePath", localFilePath);
+                intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
+                intent.putExtra("place", lostItem.place);
+                intent.putExtra("contactInfo", lostItem.contactInfo);
+                String docID = this.getSnapshots().getSnapshot(position).getId();
+                intent.putExtra("docID", docID);
+                context.startActivity(intent);
+            });
         }
         //holder.itemView.setOnClickListener(v-> Utility.debug(context));
     }

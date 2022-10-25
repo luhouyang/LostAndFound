@@ -8,10 +8,18 @@
     android:background="@drawable/bg"
     android:padding="16dp">
 
+    <androidx.appcompat.widget.SwitchCompat
+        android:id="@+id/admin_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Admin View"
+        android:visibility="gone"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/claimed_items_title_text_view"
+        android:layout_below="@+id/admin_switch"
         android:text="Claimed Items"
         android:textSize="40dp"
         android:textColor="@color/black"
@@ -65,6 +73,5 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/item_type_layout"
         android:layout_marginTop="4dp" />
-
 
 </RelativeLayout>
