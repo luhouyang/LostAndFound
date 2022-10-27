@@ -8,6 +8,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -22,7 +23,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText nameEditText, matrixNoEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     Button createAccountButton;
-    TextView loginButtonTextView;
+    TextView organizationClickableTextView, organizationTextView, loginButtonTextView;
     ProgressBar progressBar;
 
     private int credits = 0;
@@ -38,13 +39,30 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.sign_up_password_edit_text);
         confirmPasswordEditText = findViewById(R.id.sign_up_confirm_password_edit_text);
         createAccountButton = findViewById(R.id.create_account_btn);
+        organizationClickableTextView = findViewById(R.id.organization_clickable_text_view);
+        organizationTextView = findViewById(R.id.organization_text_view);
         loginButtonTextView = findViewById(R.id.login_text_view_btn);
         progressBar = findViewById(R.id.progress_bar);
 
+        organizationClickableTextView.setOnClickListener(v-> showDropDownMenu());
         createAccountButton.setOnClickListener(v-> createAccount());
         loginButtonTextView.setOnClickListener(v-> {
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
             finish();
+        });
+    }
+
+    void showDropDownMenu(){
+        PopupMenu popupMenu = new PopupMenu(SignUpActivity.this, organizationClickableTextView);
+        popupMenu.getMenu().add("Kolej Matrikulasi Labuan");
+        popupMenu.show();
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if(menuItem.getTitle()=="Kolej Matrikulasi Labuan"){
+                GlobalVariables.organization = "KOLEJ_MATRIKULASI_LABUAN";
+                organizationTextView.setText("Kolej Matrikulasi Labuan");
+                return true;
+            }
+            return false;
         });
     }
 
@@ -72,6 +90,7 @@ public class SignUpActivity extends AppCompatActivity {
                 Utility.showToast(SignUpActivity.this, "Account created successfully, verify email");
                 FirebaseUser currentUser = firebaseAuth.getCurrentUser();
                 UserData userData = new UserData();
+                userData.setOrganization(GlobalVariables.organization);
                 userData.setName(name);
                 userData.setMatrixNo(matrixNo);
                 userData.setCredits(credits);
@@ -90,6 +109,10 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     boolean isValidated(String name, String matrixNo, String email, String password, String confirmPassword){
+        if(Objects.equals(GlobalVariables.organization, "")){
+            organizationTextView.setError("Pick an organization");
+            return false;
+        }
         if(Objects.equals(name, "")){
             nameEditText.setError("Enter name");
             return false;
