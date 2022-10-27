@@ -12,12 +12,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
 import java.util.Objects;
@@ -37,17 +34,12 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
     Timestamp timestampReportClaimed;
 
     //general variables
-    private FirebaseUser currentUser;
-    private FirebaseFirestore firebaseFirestore;
     private String itemType, imageUriStr,localFilePath, timestampReported, place, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_claimed_item);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         //defining viewing item variables
         viewItemLayout = findViewById(R.id.view_claimed_item_layout);
@@ -104,9 +96,8 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
             String price = estimatePriceEditText.getText().toString();
             if (isValid(nameEditText.getText().toString(), tutorial, price)) {
                 DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
-                claimedItemDocRef.update("status", "reported").addOnSuccessListener(q -> {
-                    DocumentReference complainUserData = Utility.getDocumentReferenceUserData(currentUser);
-                    complainUserData.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                claimedItemDocRef.update("status", "complain").addOnSuccessListener(q -> {
+                    GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
                         @Override
                         public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
                             claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));

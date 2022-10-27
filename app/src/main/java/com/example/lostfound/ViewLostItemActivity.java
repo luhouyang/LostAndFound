@@ -3,28 +3,20 @@ package com.example.lostfound;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 
 public class ViewLostItemActivity extends AppCompatActivity {
@@ -42,17 +34,12 @@ public class ViewLostItemActivity extends AppCompatActivity {
     Timestamp timestampClaimed;
 
     //general variables
-    private FirebaseUser currentUser;
-    private FirebaseFirestore firebaseFirestore;
     private String itemType, imageUriStr,localFilePath, timestampReported, place, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_lost_item);
-
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         //defining viewing item variables
         viewItemLayout = findViewById(R.id.view_lost_item_layout);
@@ -105,9 +92,10 @@ public class ViewLostItemActivity extends AppCompatActivity {
         });
 
         confirmClaimTextView.setOnClickListener(v-> {
-            if (isValid(nameEditText.getText().toString(), tutorialEditText.getText().toString(), estimatePriceEditText.getText().toString())){
-                DocumentReference claimerDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
-                claimerDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            String tutorial = tutorialEditText.getText().toString();
+            String price = estimatePriceEditText.getText().toString();
+            if (isValid(nameEditText.getText().toString(), tutorial, price)){
+                GlobalVariables.userDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                     @Override
                     public void onEvent(@Nullable DocumentSnapshot claimerDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
                         //update details of claimer
@@ -117,14 +105,14 @@ public class ViewLostItemActivity extends AppCompatActivity {
                         unclaimedDocRef.update("nameOfClaimer", nameOfClaimer);
                         unclaimedDocRef.update("matrixNoOfClaimer", matrixNoOfClaimer);
                         unclaimedDocRef.update("timestampClaimed", timestampClaimed);
-                        unclaimedDocRef.update("estimatePrice", estimatePriceEditText.getText().toString());
+                        unclaimedDocRef.update("tutorialOfClaimer", tutorial);
+                        unclaimedDocRef.update("estimatePrice", price);
                         unclaimedDocRef.update("status", "claimed");
                         Utility.showToast(ViewLostItemActivity.this, "Successfully claimed");
                     }
                 });
 
                 //move data of item to claimed collection
-                Utility.getCollectionReferenceClaimed(itemType).document(docID);
                 DocumentReference claimedDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
                 DocumentReference unclaimedDocRef = Utility.getCollectionReferenceUnclaimed(itemType).document(docID);
                 unclaimedDocRef.addSnapshotListener(ViewLostItemActivity.this, new EventListener<DocumentSnapshot>() {
@@ -141,6 +129,7 @@ public class ViewLostItemActivity extends AppCompatActivity {
                         claimedItemDetails.setNameOfReporter(unclaimedDocumentSnapshot.getString("nameOfReporter"));
                         claimedItemDetails.setTimestampClaimed(unclaimedDocumentSnapshot.getTimestamp("timestampClaimed"));
                         claimedItemDetails.setTimestampReported(unclaimedDocumentSnapshot.getTimestamp("timestampClaimed"));
+                        claimedItemDetails.setTutorialOfClaimer(unclaimedDocumentSnapshot.getString("tutorialOfClaimer"));
                         claimedItemDetails.setPlace(unclaimedDocumentSnapshot.getString("place"));
                         claimedItemDetails.setStatus(unclaimedDocumentSnapshot.getString("status"));
                         claimedDocRef.set(claimedItemDetails).addOnSuccessListener(v-> {

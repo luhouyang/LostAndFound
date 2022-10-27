@@ -14,12 +14,9 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -28,7 +25,6 @@ public class SignUpActivity extends AppCompatActivity {
     TextView loginButtonTextView;
     ProgressBar progressBar;
 
-    private Pattern p = Pattern.compile("[A-Z]{2}[0-9]{10}");
     private int credits = 0;
 
     @Override
@@ -98,7 +94,7 @@ public class SignUpActivity extends AppCompatActivity {
             nameEditText.setError("Enter name");
             return false;
         }
-        if(!p.matcher(matrixNo).matches()){
+        if(!GlobalVariables.checkPattern.matcher(matrixNo).matches()){
             matrixNoEditText.setError("Enter matrix number");
             return false;
         }

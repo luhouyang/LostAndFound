@@ -20,8 +20,6 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -39,7 +37,6 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -51,7 +48,7 @@ import java.util.UUID;
 
 public class ReportLostItemActivity extends AppCompatActivity {
 
-    public Uri imageUri;
+    private Uri imageUri;
 
     ImageButton itemTypeDropDown;
     EditText contactInfoEditText, placeEditText;
@@ -60,9 +57,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
     Timestamp timestampReported;
 
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
-    private FirebaseStorage firebaseStorage;
-    private StorageReference storageReference;
-    private FirebaseUser currentUser;
     private String imageUriStr;
     private boolean clicked;
 
@@ -80,9 +74,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
         uploadPhotoTextView = findViewById(R.id.upload_photo_text_view);
         lostItemPic = findViewById(R.id.lost_item_pic);
 
-        firebaseStorage = FirebaseStorage.getInstance();
-        storageReference = firebaseStorage.getReference();
-        currentUser = FirebaseAuth.getInstance().getCurrentUser();
         imageUriStr = "NO_URI";
         clicked = false;
 
@@ -161,8 +152,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
         pd.show();
 
         final String randomKey = UUID.randomUUID().toString();
-        StorageReference pictureStorageRef = storageReference.child("image/" + itemType + "/" + randomKey);
-        imageUriStr = "image/" + itemType + "/" + randomKey;
+        StorageReference pictureStorageRef = GlobalVariables.storageReference.child("image/" + GlobalVariables.organization + "/" + itemType + "/" + randomKey);
+        imageUriStr = "image/" + GlobalVariables.organization + "/" + itemType + "/" + randomKey;
         pictureStorageRef.putFile(imageUri)
                 .addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -196,19 +187,14 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
         if(!checkInformation(itemType, place)){
             clicked = false;
-            return;
         }else{
-            DocumentReference reporterDataDocRef = Utility.getDocumentReferenceUserData(currentUser);
-            reporterDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+            GlobalVariables.userDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException error) {
-                    String nameOfReporter = documentSnapshot.getString("name");
-                    String matrixNoOfReporter = documentSnapshot.getString("matrixNo");
-
+                public void onEvent(@Nullable DocumentSnapshot reporterDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
                     LostItem lostItem = new LostItem();
 
-                    lostItem.setNameOfReporter(nameOfReporter);
-                    lostItem.setMatrixNoOfReporter(matrixNoOfReporter);
+                    lostItem.setNameOfReporter(GlobalVariables.name);
+                    lostItem.setMatrixNoOfReporter(GlobalVariables.matrixNo);
                     lostItem.setItemType(itemType);
                     lostItem.setContactInfo(contactInfo);
                     lostItem.setTimestampReported(timestampReported);
@@ -224,9 +210,9 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     DocumentReference documentReference = Utility.getCollectionReferenceUnclaimed(itemType).document();
                     documentReference.set(lostItem)
                             .addOnCompleteListener(v-> {
-                                int credits = documentSnapshot.getLong("credits").intValue();
+                                int credits = reporterDocumentSnapshot.getLong("credits").intValue();
                                 credits += 1;
-                                reporterDataDocRef.update("credits", credits);
+                                GlobalVariables.userDataDocRef.update("credits", credits);
                                 Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
                                 finish();
                             })

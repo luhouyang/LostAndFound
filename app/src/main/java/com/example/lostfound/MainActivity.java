@@ -1,5 +1,6 @@
 package com.example.lostfound;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -12,6 +13,12 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
+
+import java.util.regex.Pattern;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,6 +29,21 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        GlobalVariables.currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        GlobalVariables.userDataDocRef = Utility.getDocumentReferenceUserData(GlobalVariables.currentUser);
+        GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot userData, @Nullable FirebaseFirestoreException error) {
+                GlobalVariables.name = userData.getString("name");
+                GlobalVariables.matrixNo = userData.getString("matrixNo");
+                GlobalVariables.key = userData.getString("key");
+                GlobalVariables.organization = userData.getString("organization");
+            }
+        });
+        GlobalVariables.firebaseStorage = FirebaseStorage.getInstance();
+        GlobalVariables.storageReference = GlobalVariables.firebaseStorage.getReference();
+        GlobalVariables.checkPattern = Pattern.compile("[A-Z]{2}[0-9]{10}");
 
         reportItemTextView = findViewById(R.id.report_lost_items_text_view);
         unclaimedItemTextView = findViewById(R.id.unclaimed_items_text_view);

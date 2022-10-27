@@ -1,6 +1,5 @@
 package com.example.lostfound;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -13,12 +12,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 
 import java.util.Objects;
@@ -31,7 +24,6 @@ public class ClaimedItemActivity extends AppCompatActivity {
     ImageButton itemTypeDropDownBtn;
     ClaimedItemAdaptor claimedItemAdaptor;
 
-    private String key;
     private boolean adminView;
 
     @Override
@@ -46,18 +38,9 @@ public class ClaimedItemActivity extends AppCompatActivity {
         itemTypeDropDownBtn = findViewById(R.id.claimed_item_type_drop_down);
 
         adminView = false;
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        DocumentReference userDocRef = Utility.getDocumentReferenceUserData(currentUser);
-        userDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot userData, @Nullable FirebaseFirestoreException error) {
-                key = userData.getString("key");
-                if (Objects.equals(key, "admin")){
-                    adminSwitch.setVisibility(View.VISIBLE);
-                }
-            }
-        });
+        if(Objects.equals(GlobalVariables.key, "admin")){
+            adminSwitch.setVisibility(View.VISIBLE);
+        }
 
         adminSwitch.setOnClickListener(v-> {
             adminView = adminSwitch.isChecked();
@@ -130,7 +113,7 @@ public class ClaimedItemActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        claimedItemAdaptor = new ClaimedItemAdaptor(options, this, key, adminView);
+        claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
         recyclerView.setAdapter(claimedItemAdaptor);
     }
 

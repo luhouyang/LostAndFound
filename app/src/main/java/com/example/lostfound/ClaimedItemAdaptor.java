@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -44,7 +43,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
     protected void onBindViewHolder(@NonNull ClaimedItemAdaptor.ClaimedItemViewHolder holder, int position, @NonNull LostItem lostItem) {
         holder.itemTypeTextView.setText(lostItem.itemType);
         holder.imageUriString.setText(lostItem.imageUriStr);
-        storageReference = FirebaseStorage.getInstance().getReference(lostItem.imageUriStr);
+        storageReference = GlobalVariables.firebaseStorage.getReference(lostItem.imageUriStr);
         try {
             File localFile = File.createTempFile("image", ".jpg");
             storageReference.getFile(localFile).addOnSuccessListener(v-> {
@@ -59,7 +58,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
         holder.placeTextView.setText(lostItem.place);
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        if (lostItem.status.equals("reported")){
+        if (lostItem.status.equals("complain")){
             int red = ContextCompat.getColor(this.context, R.color.red_bright);
             holder.linearLayout.setBackgroundColor(red);
             if (Objects.equals(this.key, "admin") && this.adminView){
@@ -90,7 +89,6 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
                 context.startActivity(intent);
             });
         }
-        //holder.itemView.setOnClickListener(v-> Utility.debug(context));
     }
 
     @NonNull

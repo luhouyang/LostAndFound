@@ -19,6 +19,7 @@ public class LostItem {
     //claiming
     String nameOfClaimer;
     String matrixNoOfClaimer;
+    String tutorialOfClaimer;
     String estimatePrice;
     Timestamp timestampClaimed;
 
@@ -110,6 +111,14 @@ public class LostItem {
 
     public void setTimestampClaimed(Timestamp timestampClaimed) {
         this.timestampClaimed = timestampClaimed;
+    }
+
+    public String getTutorialOfClaimer() {
+        return tutorialOfClaimer;
+    }
+
+    public void setTutorialOfClaimer(String tutorialOfClaimer) {
+        this.tutorialOfClaimer = tutorialOfClaimer;
     }
 
     public String getEstimatePrice() {

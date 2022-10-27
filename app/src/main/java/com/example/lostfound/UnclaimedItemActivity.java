@@ -2,19 +2,15 @@ package com.example.lostfound;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
-
-import java.util.Arrays;
 
 public class UnclaimedItemActivity extends AppCompatActivity {
 
@@ -93,7 +89,7 @@ public class UnclaimedItemActivity extends AppCompatActivity {
     }
 
     void setUpRecyclerView(String itemType){
-        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);;
+        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
