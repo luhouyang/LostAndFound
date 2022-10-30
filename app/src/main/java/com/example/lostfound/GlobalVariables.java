@@ -11,6 +11,7 @@ public class GlobalVariables {
 
     // User ID & Reference
     public static FirebaseUser currentUser;
+    public static String currentUserID;
     public static DocumentReference userDataDocRef;
 
     // Firebase database reference

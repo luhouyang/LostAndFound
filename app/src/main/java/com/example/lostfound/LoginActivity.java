@@ -1,5 +1,6 @@
 package com.example.lostfound;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -12,8 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -26,6 +33,8 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        GlobalVariables.checkPattern = Pattern.compile("[A-Z]{2}[0-9]{10}");
 
         nameEditText = findViewById(R.id.login_name_edit_text);
         matrixNoEditText = findViewById(R.id.login_matrix_no_edit_text);
@@ -44,8 +53,8 @@ public class LoginActivity extends AppCompatActivity {
 
     void loginUser(){
         String name  = nameEditText.getText().toString();
-        String matrixNo = matrixNoEditText.getText().toString();
-        String email = emailEditText.getText().toString();
+        String matrixNo = matrixNoEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString();
 
         if(!correctLoginInfo(name, matrixNo, email, password)){
@@ -61,14 +70,30 @@ public class LoginActivity extends AppCompatActivity {
         firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task->{
             changeProgressBar(false);
             if(task.isSuccessful()){
-                if(firebaseAuth.getCurrentUser().isEmailVerified()){
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                if(currentUser != null && currentUser.isEmailVerified()){
+                    GlobalVariables.currentUser = currentUser;
+                    GlobalVariables.currentUserID = GlobalVariables.currentUser.getUid();
+                    GlobalVariables.userDataDocRef = Utility.getDocumentReferenceUserData(GlobalVariables.currentUser);
+                    GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable DocumentSnapshot userData, @Nullable FirebaseFirestoreException error) {
+                            GlobalVariables.name = userData.getString("name");
+                            GlobalVariables.matrixNo = userData.getString("matrixNo");
+                            GlobalVariables.key = userData.getString("key");
+                            GlobalVariables.organization = userData.getString("organization");
+                        }
+                    });
+                    GlobalVariables.firebaseStorage = FirebaseStorage.getInstance();
+                    GlobalVariables.storageReference = GlobalVariables.firebaseStorage.getReference();
+
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
                 }else{
                     Utility.showToast(LoginActivity.this, "Email is not verified");
                 }
             }else{
-                Utility.showToast(LoginActivity.this, task.getException().getLocalizedMessage());
+                Utility.showToast(LoginActivity.this, Objects.requireNonNull(task.getException()).getLocalizedMessage());
             }
         });
     }

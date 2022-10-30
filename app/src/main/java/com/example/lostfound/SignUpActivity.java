@@ -68,15 +68,13 @@ public class SignUpActivity extends AppCompatActivity {
 
     void createAccount(){
         String name = nameEditText.getText().toString().toUpperCase(Locale.ROOT);
-        String matrixNo = matrixNoEditText.getText().toString();
-        String email = emailEditText.getText().toString();
+        String matrixNo = matrixNoEditText.getText().toString().trim();
+        String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString();
         String confirmPassword = confirmPasswordEditText.getText().toString();
 
         if(isValidated(name, matrixNo, email, password, confirmPassword)){
             createAccountInFirebase(name, matrixNo, email, password);
-        }else{
-            return;
         }
     }
 

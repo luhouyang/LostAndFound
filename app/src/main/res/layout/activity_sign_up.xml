@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/organization_text_view"
                 android:text="Organization"
-                android:textSize="32dp"
+                android:textSize="24dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 />

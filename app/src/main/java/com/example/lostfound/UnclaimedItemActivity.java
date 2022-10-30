@@ -30,8 +30,6 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         itemTypeDropDownBtn = findViewById(R.id.unclaimed_item_type_drop_down);
 
         itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
         setUpRecyclerView("Place-Holder");
     }
 
@@ -48,40 +46,30 @@ public class UnclaimedItemActivity extends AppCompatActivity {
                 itemTypeTextView.setText("Bottles");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Bottles");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Calculators");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Bags"){
                 itemTypeTextView.setText("Bags");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Bags");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Electronic Devices"){
                 itemTypeTextView.setText("Electronic Devices");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Electronic Devices");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Miscellaneous"){
                 itemTypeTextView.setText("Miscellaneous");
                 lostItemAdaptor.stopListening();
                 setUpRecyclerView("Miscellaneous");
-                lostItemAdaptor.startListening();
-                lostItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             return false;
@@ -92,9 +80,11 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        lostItemAdaptor = new LostItemAdaptor(options, this);
+        recyclerView.setLayoutManager(new GridLayoutManager(UnclaimedItemActivity.this, 2));
+        lostItemAdaptor = new LostItemAdaptor(options, UnclaimedItemActivity.this);
         recyclerView.setAdapter(lostItemAdaptor);
+        lostItemAdaptor.startListening();
+        lostItemAdaptor.notifyDataSetChanged();
     }
 
     @Override

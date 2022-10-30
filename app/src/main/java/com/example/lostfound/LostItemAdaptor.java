@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
@@ -74,7 +73,7 @@ public class LostItemAdaptor extends FirestoreRecyclerAdapter<LostItem, LostItem
         return new LostItemViewHolder(view);
     }
 
-    class LostItemViewHolder extends RecyclerView.ViewHolder {
+    static class LostItemViewHolder extends RecyclerView.ViewHolder {
         TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString, placeTextView;
         ImageView imageView;
 

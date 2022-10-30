@@ -5,6 +5,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Activity;
@@ -20,6 +22,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +30,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -35,6 +39,8 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -48,11 +54,13 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
     private Uri imageUri;
 
+    RecyclerView recyclerView;
     ImageButton itemTypeDropDown;
     EditText contactInfoEditText, placeEditText;
     TextView itemTypeClickableTextView, itemTypeTextView, reportItemBtnTextView, uploadPhotoTextView;
     ImageView lostItemPic;
     Timestamp timestampReported;
+    LostItemAdaptor lostItemAdaptor;
 
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     private String imageUriStr;
@@ -63,6 +71,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_lost_item);
 
+        recyclerView = findViewById(R.id.report_item_past_items_recycler_view);
         itemTypeDropDown = findViewById(R.id.item_type_drop_down);
         contactInfoEditText = findViewById(R.id.contact_info_edit_text);
         itemTypeClickableTextView = findViewById(R.id.item_type_clickable_text_view);
@@ -78,10 +87,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
         imageUri = null;
 
         itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeDropDown.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
 
-        //lostItemPic.setOnClickListener(view-> choosePicture());
         lostItemPic.setOnClickListener(v-> {
             if(checkAndRequestPermissions(ReportLostItemActivity.this)){
                 chooseImage(ReportLostItemActivity.this);
@@ -91,6 +97,34 @@ public class ReportLostItemActivity extends AppCompatActivity {
             if (!clicked){
                 clicked = true;
                 addLostItemToDatabase();
+            }
+        });
+        setUpRecyclerView("Place-Holder");
+    }
+
+    void setUpRecyclerView(String itemType){
+        Query query = Utility.getCollectionReferenceUnclaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshot, @Nullable FirebaseFirestoreException error) {
+                if (querySnapshot.size()!=0){
+                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+                            .setQuery(query, LostItem.class).build();
+                    recyclerView.setLayoutManager(new GridLayoutManager(ReportLostItemActivity.this, 2));
+                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this);
+                    recyclerView.setAdapter(lostItemAdaptor);
+                    lostItemAdaptor.startListening();
+                    lostItemAdaptor.notifyDataSetChanged();
+                    recyclerView.setVisibility(View.VISIBLE);
+                }else{
+                    Query defaultQuery = Utility.getCollectionReferenceUnclaimed("Place-Holder").orderBy("timestampReported", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+                            .setQuery(defaultQuery, LostItem.class).build();
+                    recyclerView.setLayoutManager(new GridLayoutManager(ReportLostItemActivity.this, 2));
+                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this);
+                    recyclerView.setAdapter(lostItemAdaptor);
+                    recyclerView.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -106,43 +140,37 @@ public class ReportLostItemActivity extends AppCompatActivity {
         popupMenu.setOnMenuItemClickListener(menuItem -> {
             if(menuItem.getTitle()=="Bottles"){
                 itemTypeTextView.setText("Bottles");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Bottles");
                 return true;
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Calculators");
                 return true;
             }
             if(menuItem.getTitle()=="Bags"){
                 itemTypeTextView.setText("Bags");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Bags");
                 return true;
             }
             if(menuItem.getTitle()=="Electronic Devices"){
                 itemTypeTextView.setText("Electronic Devices");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Electronic Devices");
                 return true;
             }
             if(menuItem.getTitle()=="Miscellaneous"){
                 itemTypeTextView.setText("Miscellaneous");
+                lostItemAdaptor.stopListening();
+                setUpRecyclerView("Miscellaneous");
                 return true;
             }
             return false;
         });
     }
-
-    //void choosePicture(){
-    //    Intent intent = new Intent();
-    //    intent.setType("Image/**");
-    //    intent.setAction(Intent.ACTION_GET_CONTENT);
-    //    startActivityForResult(intent, 1);
-    //}
-
-    //@Override
-    //protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-    //    super.onActivityResult(requestCode, resultCode, data);
-    //    if(requestCode==1 && resultCode==RESULT_OK && data!=null && data.getData()!=null){
-    //        imageUri = data.getData();
-    //        lostItemPic.setImageURI(imageUri);
-    //    }
-    //}
 
     void uploadImageUriToFirestore(String itemType){
         final ProgressDialog pd = new ProgressDialog(this);
@@ -174,7 +202,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
                         pd.setMessage("Progress: " + (int) progressPercentage + "%");
                     }
                 });
-        return;
     }
 
     void addLostItemToDatabase(){
@@ -186,41 +213,41 @@ public class ReportLostItemActivity extends AppCompatActivity {
         if(!checkInformation(itemType, place)){
             clicked = false;
         }else{
-            GlobalVariables.userDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
-                @Override
-                public void onEvent(@Nullable DocumentSnapshot reporterDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
-                    LostItem lostItem = new LostItem();
+            LostItem lostItem = new LostItem();
 
-                    lostItem.setNameOfReporter(GlobalVariables.name);
-                    lostItem.setMatrixNoOfReporter(GlobalVariables.matrixNo);
-                    lostItem.setItemType(itemType);
-                    lostItem.setContactInfo(contactInfo);
-                    lostItem.setTimestampReported(timestampReported);
-                    lostItem.setPlace(place);
-                    lostItem.setStatus("unclaimed");
+            lostItem.setReporterUserID(GlobalVariables.currentUserID);
+            lostItem.setNameOfReporter(GlobalVariables.name);
+            lostItem.setMatrixNoOfReporter(GlobalVariables.matrixNo);
+            lostItem.setItemType(itemType);
+            lostItem.setContactInfo(contactInfo);
+            lostItem.setTimestampReported(timestampReported);
+            lostItem.setPlace(place);
+            lostItem.setStatus("unclaimed");
 
-                    //Image upload
-                    if(imageUri!=null){
-                        uploadImageUriToFirestore(itemType);
-                    }
-                    lostItem.setImageUriStr(imageUriStr);
+            //Image upload
+            if(imageUri!=null){
+                uploadImageUriToFirestore(itemType);
+            }
+            lostItem.setImageUriStr(imageUriStr);
 
-                    DocumentReference documentReference = Utility.getCollectionReferenceUnclaimed(itemType).document();
-                    documentReference.set(lostItem)
-                            .addOnCompleteListener(v-> {
+            DocumentReference documentReference = Utility.getCollectionReferenceUnclaimed(itemType).document();
+            documentReference.set(lostItem)
+                    .addOnCompleteListener(v-> {
+                        GlobalVariables.userDataDocRef.addSnapshotListener(this, new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot reporterDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
                                 int credits = reporterDocumentSnapshot.getLong("credits").intValue();
                                 credits += 1;
                                 GlobalVariables.userDataDocRef.update("credits", credits);
-                                Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
-                                finish();
-                            })
-                            .addOnFailureListener(v-> {
-                                Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage());
-                                finish();
-                            });
-                    startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
-                }
-            });
+                            }
+                        });
+                        Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
+                        finish();
+                    })
+                    .addOnFailureListener(v-> {
+                        Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage());
+                    });
+            //startActivity(new Intent(ReportLostItemActivity.this, MainActivity.class));
         }
     }
 
@@ -323,7 +350,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
                         Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
                         lostItemPic.setImageBitmap(selectedImage);
                         imageUri = Utility.getImageUri(this, selectedImage);
-                        //lostItemPic.setImageURI(imageUri);
                     }
                     break;
                 case 1:
@@ -341,7 +367,6 @@ public class ReportLostItemActivity extends AppCompatActivity {
                             }
                         }
                         imageUri = data.getData();
-                        //lostItemPic.setImageURI(imageUri);
                     }
                     break;
             }

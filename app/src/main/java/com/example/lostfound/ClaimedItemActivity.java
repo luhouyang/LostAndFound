@@ -46,12 +46,8 @@ public class ClaimedItemActivity extends AppCompatActivity {
             adminView = adminSwitch.isChecked();
             claimedItemAdaptor.stopListening();
             setUpRecyclerView(itemTypeTextView.getText().toString());
-            claimedItemAdaptor.startListening();
-            claimedItemAdaptor.notifyDataSetChanged();
         });
         itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeTextView.setOnClickListener(v-> showDropDownMenu());
-        //itemTypeDropDownBtn.setOnClickListener(v-> showDropDownMenu());
         setUpRecyclerView("Place-Holder");
     }
 
@@ -68,40 +64,30 @@ public class ClaimedItemActivity extends AppCompatActivity {
                 itemTypeTextView.setText("Bottles");
                 claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Bottles");
-                claimedItemAdaptor.startListening();
-                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Calculators"){
                 itemTypeTextView.setText("Calculators");
                 claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Calculators");
-                claimedItemAdaptor.startListening();
-                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Bags"){
                 itemTypeTextView.setText("Bags");
                 claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Bags");
-                claimedItemAdaptor.startListening();
-                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Electronic Devices"){
                 itemTypeTextView.setText("Electronic Devices");
                 claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Electronic Devices");
-                claimedItemAdaptor.startListening();
-                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             if(menuItem.getTitle()=="Miscellaneous"){
                 itemTypeTextView.setText("Miscellaneous");
                 claimedItemAdaptor.stopListening();
                 setUpRecyclerView("Miscellaneous");
-                claimedItemAdaptor.startListening();
-                claimedItemAdaptor.notifyDataSetChanged();
                 return true;
             }
             return false;
@@ -115,6 +101,8 @@ public class ClaimedItemActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
         claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
         recyclerView.setAdapter(claimedItemAdaptor);
+        claimedItemAdaptor.startListening();
+        claimedItemAdaptor.notifyDataSetChanged();
     }
 
     @Override

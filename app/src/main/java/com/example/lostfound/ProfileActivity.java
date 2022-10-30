@@ -31,12 +31,10 @@ public class ProfileActivity extends AppCompatActivity {
             public void onEvent(@Nullable DocumentSnapshot userData, @Nullable FirebaseFirestoreException error) {
                 nameTextView.setText(GlobalVariables.name);
                 matrixNoTextView.setText(GlobalVariables.matrixNo);
-                creditsTextView.setText((userData.getLong("credits")).toString());
+                creditsTextView.setText(String.valueOf(userData != null ? userData.getLong("credits") : null));
             }
         });
 
-        backButton.setOnClickListener(v-> {
-            finish();
-        });
+        backButton.setOnClickListener(v-> finish());
     }
 }

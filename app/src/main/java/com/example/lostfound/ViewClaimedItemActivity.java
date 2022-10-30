@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,9 +33,6 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
     TextView cancelReportClaimTextView, confirmReportTextView;
     EditText matrixNumberEditText, nameEditText, tutorialEditText, emailEditText, itemDetailEditText, estimatePriceEditText;
     Timestamp timestampReportClaimed;
-
-    //general variables
-    private String itemType, imageUriStr,localFilePath, timestampReported, place, contactInfo, docID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +62,13 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         timestampReportClaimed = Timestamp.now();
 
         //display viewing info
-        itemType = getIntent().getStringExtra("itemType");
-        imageUriStr = getIntent().getStringExtra("imageUriStr");
-        localFilePath = getIntent().getStringExtra("localFilePath");
-        timestampReported = getIntent().getStringExtra("timestampReported");
-        place = getIntent().getStringExtra("place");
-        contactInfo = getIntent().getStringExtra("contactInfo");
-        docID = getIntent().getStringExtra("docID");
+        String itemType = getIntent().getStringExtra("itemType");
+        String imageUriStr = getIntent().getStringExtra("imageUriStr");
+        String localFilePath = getIntent().getStringExtra("localFilePath");
+        String timestampReported = getIntent().getStringExtra("timestampReported");
+        String place = getIntent().getStringExtra("place");
+        String contactInfo = getIntent().getStringExtra("contactInfo");
+        String docID = getIntent().getStringExtra("docID");
 
         bitmap = BitmapFactory.decodeFile(localFilePath);
 
@@ -83,12 +81,12 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
 
         //functions and buttons
         claimItemTextView.setOnClickListener(v-> {
-            viewItemLayout.setVisibility(viewItemLayout.GONE);
-            reportClaimItemLayout.setVisibility(reportClaimItemLayout.VISIBLE);
+            viewItemLayout.setVisibility(View.GONE);
+            reportClaimItemLayout.setVisibility(View.VISIBLE);
         });
         cancelReportClaimTextView.setOnClickListener(v-> {
-            viewItemLayout.setVisibility(viewItemLayout.VISIBLE);
-            reportClaimItemLayout.setVisibility(reportClaimItemLayout.GONE);
+            viewItemLayout.setVisibility(View.VISIBLE);
+            reportClaimItemLayout.setVisibility(View.GONE);
         });
 
         confirmReportTextView.setOnClickListener(v-> {
@@ -96,19 +94,19 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
             String price = estimatePriceEditText.getText().toString();
             if (isValid(nameEditText.getText().toString(), tutorial, price)) {
                 DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
-                claimedItemDocRef.update("status", "complain").addOnSuccessListener(q -> {
-                    GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                        @Override
-                        public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
-                            claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));
-                            claimedItemDocRef.update("matrixNoOfComplain", complainUserDataSnapshot.getString("matrixNo"));
-                            claimedItemDocRef.update("complainPrice", price);
-                            claimedItemDocRef.update("tutorialComplain", tutorial);
-                            claimedItemDocRef.update("timestampComplained", timestampReportClaimed);
-                            Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
-                        }
-                    });
-                });
+                claimedItemDocRef.update("status", "reported").addOnSuccessListener(q ->
+                        GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
+                        claimedItemDocRef.update("complainUserID", GlobalVariables.currentUserID);
+                        claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));
+                        claimedItemDocRef.update("matrixNoOfComplain", complainUserDataSnapshot.getString("matrixNo"));
+                        claimedItemDocRef.update("complainPrice", price);
+                        claimedItemDocRef.update("tutorialComplain", tutorial);
+                        claimedItemDocRef.update("timestampComplained", timestampReportClaimed);
+                        Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
+                    }
+                }));
                 finish();
             }
         });

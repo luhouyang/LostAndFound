@@ -58,7 +58,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
         holder.placeTextView.setText(lostItem.place);
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        if (lostItem.status.equals("complain")){
+        if (lostItem.status.equals("reported")){
             int red = ContextCompat.getColor(this.context, R.color.red_bright);
             holder.linearLayout.setBackgroundColor(red);
             if (Objects.equals(this.key, "admin") && this.adminView){
@@ -95,10 +95,10 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
     @Override
     public ClaimedItemAdaptor.ClaimedItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_lost_item, parent, false);
-        return new ClaimedItemAdaptor.ClaimedItemViewHolder(view);
+        return new ClaimedItemViewHolder(view);
     }
 
-    class ClaimedItemViewHolder extends RecyclerView.ViewHolder {
+    static class ClaimedItemViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         TextView itemTypeTextView, contactInfoTextView, timestampTextView, imageUriString, placeTextView;
         ImageView imageView;
