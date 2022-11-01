@@ -1,5 +1,8 @@
 package com.example.lostfound;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +34,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.github.drjacky.imagepicker.ImagePicker;
+import com.github.drjacky.imagepicker.constant.ImageProvider;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -45,10 +50,16 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import kotlin.Unit;
+import kotlin.jvm.functions.Function1;
+import kotlin.jvm.internal.Intrinsics;
 
 public class ReportLostItemActivity extends AppCompatActivity {
 
@@ -88,11 +99,44 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
         imageUri = null;
 
+        ActivityResultLauncher<Intent> launcher=
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),(ActivityResult result)->{
+                    if(result.getResultCode()==RESULT_OK){
+                        Uri uri=result.getData().getData();
+                        lostItemPic.setImageURI(uri);
+                        // Use the uri to load the image
+                        imageUri = uri;
+                    }else if(result.getResultCode()==ImagePicker.RESULT_ERROR){
+                        Utility.showToast(ReportLostItemActivity.this, ImagePicker.Companion.getError(result.getData()));
+                        // Use ImagePicker.Companion.getError(result.getData()) to show an error
+                    }
+                });
+
         itemTypeClickableTextView.setOnClickListener(v-> showDropDownMenu());
 
-        lostItemPic.setOnClickListener(v-> {
-            if(checkAndRequestPermissions(ReportLostItemActivity.this)){
-                chooseImage(ReportLostItemActivity.this);
+        //lostItemPic.setOnClickListener(v-> {
+        //    if(checkAndRequestPermissions(ReportLostItemActivity.this)){
+        //        chooseImage(ReportLostItemActivity.this);
+        //    }
+        //});
+        lostItemPic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImagePicker.Companion.with(ReportLostItemActivity.this)
+                        .crop()
+                        .maxResultSize(1080, 1080, true)
+                        .provider(ImageProvider.BOTH)
+                        .createIntentFromDialog((Function1)(new Function1(){
+                            public Object invoke(Object var1){
+                                this.invoke((Intent)var1);
+                                return Unit.INSTANCE;
+                            }
+
+                            public final void invoke(@NotNull Intent it){
+                                Intrinsics.checkNotNullParameter(it,"it");
+                                launcher.launch(it);
+                            }
+                        }));
             }
         });
         reportItemBtnTextView.setOnClickListener(v-> {

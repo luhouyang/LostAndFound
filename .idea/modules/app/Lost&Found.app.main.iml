@@ -27,6 +27,7 @@
       <sourceFolder url="file://$MODULE_DIR$/../../../app/build/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/build/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
       <sourceFolder url="file://$MODULE_DIR$/../../../app/build/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../app/build/generated/ap_generated_sources/debug/out" isTestSource="false" generated="true" />
     </content>
     <content url="file://$MODULE_DIR$/../../../app/build/generated/renderscript_source_output_dir/debug/out" />
     <content url="file://$MODULE_DIR$/../../../app/build/generated/res/google-services/debug">
@@ -61,8 +62,8 @@
     <orderEntry type="library" name="Gradle: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1" level="project" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.6.1" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.0" level="project" />
-    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.6.0" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.7.10" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.10" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-annotations:16.1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.errorprone:error_prone_annotations:2.14.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-javalite:3.21.7" level="project" />
@@ -81,6 +82,10 @@
     <orderEntry type="library" name="Gradle: androidx.paging:paging-common:3.0.0" level="project" />
     <orderEntry type="library" name="Gradle: io.reactivex.rxjava3:rxjava:3.0.2" level="project" />
     <orderEntry type="library" name="Gradle: org.reactivestreams:reactive-streams:1.0.3" level="project" />
+    <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-android-extensions-runtime:1.7.10" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.collection:collection-ktx:1.1.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okhttp3:okhttp:3.12.13" level="project" />
+    <orderEntry type="library" name="Gradle: com.squareup.okio:okio:1.17.5" level="project" />
     <orderEntry type="library" name="Gradle: androidx.appcompat:appcompat:1.5.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.activity:activity:1.5.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.core:core:1.8.0@aar" level="project" />
@@ -99,7 +104,7 @@
     <orderEntry type="library" name="Gradle: androidx.cursoradapter:cursoradapter:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.drawerlayout:drawerlayout:1.1.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.customview:customview:1.1.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.fragment:fragment:1.3.6@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.fragment:fragment:1.4.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.viewpager:viewpager:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.loader:loader:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata:2.0.0@aar" level="project" />
@@ -110,11 +115,11 @@
     <orderEntry type="library" name="Gradle: androidx.constraintlayout:constraintlayout:2.1.4@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.dynamicanimation:dynamicanimation:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.legacy:legacy-support-core-utils:1.0.0@aar" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.documentfile:documentfile:1.0.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.documentfile:documentfile:1.0.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.localbroadcastmanager:localbroadcastmanager:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.print:print:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.recyclerview:recyclerview:1.2.1@aar" level="project" />
-    <orderEntry type="library" name="Gradle: androidx.transition:transition:1.2.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.transition:transition:1.4.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: androidx.viewpager2:viewpager2:1.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.firebaseui:firebase-ui-firestore:8.0.1@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.firebaseui:firebase-ui-common:8.0.1@aar" level="project" />
@@ -141,5 +146,14 @@
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-auth-api-phone:17.4.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.android.gms:play-services-safetynet:17.0.0@aar" level="project" />
     <orderEntry type="library" name="Gradle: com.google.firebase:firebase-storage:20.1.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.Drjacky:ImagePicker:2.3.20@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.exifinterface:exifinterface:1.3.3@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.fragment:fragment-ktx:1.4.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.activity:activity-ktx:1.2.3@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-runtime-ktx:2.3.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.savedstate:savedstate-ktx:1.1.0@aar" level="project" />
+    <orderEntry type="library" name="Gradle: androidx.lifecycle:lifecycle-livedata-core-ktx:2.3.1@aar" level="project" />
+    <orderEntry type="library" name="Gradle: com.github.yalantis:ucrop:2.2.8@aar" level="project" />
   </component>
 </module>

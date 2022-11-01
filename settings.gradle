@@ -3,6 +3,7 @@ pluginManagement {
         gradlePluginPortal()
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }  //Make sure to add this in your project for uCrop - an internal library
     }
 }
 dependencyResolutionManagement {
@@ -10,6 +11,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url "https://jitpack.io" }
     }
 }
 rootProject.name = "Lost&Found"
