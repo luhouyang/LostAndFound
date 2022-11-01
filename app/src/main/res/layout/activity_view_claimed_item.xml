@@ -205,6 +205,88 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/process_report_item_layout"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_return_text_view"
+                android:text="Return"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_report_image_uri_string"
+                android:text="image URI"
+                android:textSize="12dp"
+                android:textColor="@color/black"
+                android:visibility="gone"
+                />
+
+            <ImageView
+                android:id="@+id/view_report_item_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginVertical="4dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_report_item_timestamp_text_view"
+                android:text="timestamp"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:background="@color/dark_blue_grey"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/view_report_item_place_text_view"
+                android:text="loaction"
+                android:textSize="16dp"
+                android:textColor="@color/black"
+                android:background="@color/dark_blue_grey"
+                />
+
+
+            <TextView
+                android:id="@+id/view_report_contact_info_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/blueish_grey"
+                android:ellipsize="end"
+                android:minLines="10"
+                android:text="contact info"
+                android:textColor="@color/black"
+                android:textSize="16dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/verify_report_item_text_view"
+                android:text="VERIFY REPORT"
+                android:textSize="40dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@color/teal_200"
+                android:layout_marginVertical="4dp"
+                />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </ScrollView>

@@ -72,6 +72,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
                     intent.putExtra("contactInfo", lostItem.contactInfo);
                     String docID = this.getSnapshots().getSnapshot(position).getId();
                     intent.putExtra("docID", docID);
+                    intent.putExtra("status", lostItem.status);
                     context.startActivity(intent);
                 });
             }
@@ -86,6 +87,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
                 intent.putExtra("contactInfo", lostItem.contactInfo);
                 String docID = this.getSnapshots().getSnapshot(position).getId();
                 intent.putExtra("docID", docID);
+                intent.putExtra("status", lostItem.status);
                 context.startActivity(intent);
             });
         }

@@ -81,7 +81,7 @@ public class UnclaimedItemActivity extends AppCompatActivity {
         FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                 .setQuery(query, LostItem.class).build();
         recyclerView.setLayoutManager(new GridLayoutManager(UnclaimedItemActivity.this, 2));
-        lostItemAdaptor = new LostItemAdaptor(options, UnclaimedItemActivity.this);
+        lostItemAdaptor = new LostItemAdaptor(options, UnclaimedItemActivity.this, "");
         recyclerView.setAdapter(lostItemAdaptor);
         lostItemAdaptor.startListening();
         lostItemAdaptor.notifyDataSetChanged();

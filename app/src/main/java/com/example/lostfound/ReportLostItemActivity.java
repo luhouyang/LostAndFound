@@ -111,7 +111,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                             .setQuery(query, LostItem.class).build();
                     recyclerView.setLayoutManager(new GridLayoutManager(ReportLostItemActivity.this, 2));
-                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this);
+                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this, "reporting");
                     recyclerView.setAdapter(lostItemAdaptor);
                     lostItemAdaptor.startListening();
                     lostItemAdaptor.notifyDataSetChanged();
@@ -121,7 +121,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
                             .setQuery(defaultQuery, LostItem.class).build();
                     recyclerView.setLayoutManager(new GridLayoutManager(ReportLostItemActivity.this, 2));
-                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this);
+                    lostItemAdaptor = new LostItemAdaptor(options, ReportLostItemActivity.this, "reporting");
                     recyclerView.setAdapter(lostItemAdaptor);
                     recyclerView.setVisibility(View.GONE);
                 }
