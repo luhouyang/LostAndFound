@@ -1,5 +1,6 @@
 package com.example.lostfound;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -12,7 +13,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Objects;
 
@@ -95,31 +99,40 @@ public class ClaimedItemActivity extends AppCompatActivity {
     }
 
     void setUpRecyclerView(String itemType){
+        //Query query = Utility.getCollectionReferenceClaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
+        //FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+        //        .setQuery(query, LostItem.class).build();
+        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        //claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
+        //recyclerView.setAdapter(claimedItemAdaptor);
+        //claimedItemAdaptor.startListening();
+        //claimedItemAdaptor.notifyDataSetChanged();
+
         Query query = Utility.getCollectionReferenceClaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
-        FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
-                .setQuery(query, LostItem.class).build();
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
-        recyclerView.setAdapter(claimedItemAdaptor);
-        claimedItemAdaptor.startListening();
-        claimedItemAdaptor.notifyDataSetChanged();
+        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot querySnapshot, @Nullable FirebaseFirestoreException error) {
+                if (querySnapshot.size()!=0){
+                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+                            .setQuery(query, LostItem.class).build();
+                    recyclerView.setLayoutManager(new GridLayoutManager(ClaimedItemActivity.this, 2));
+                    claimedItemAdaptor = new ClaimedItemAdaptor(options, ClaimedItemActivity.this, GlobalVariables.key, adminView);
+                    recyclerView.setAdapter(claimedItemAdaptor);
+                    claimedItemAdaptor.startListening();
+                    claimedItemAdaptor.notifyDataSetChanged();
+                    recyclerView.setVisibility(View.VISIBLE);
+                }else{
+                    Query defaultQuery = Utility.getCollectionReferenceClaimed("Place-Holder").orderBy("timestampReported", Query.Direction.DESCENDING);
+                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+                            .setQuery(defaultQuery, LostItem.class).build();
+                    recyclerView.setLayoutManager(new GridLayoutManager(ClaimedItemActivity.this, 2));
+                    claimedItemAdaptor = new ClaimedItemAdaptor(options, ClaimedItemActivity.this, GlobalVariables.key, adminView);
+                    recyclerView.setAdapter(claimedItemAdaptor);
+                    recyclerView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        claimedItemAdaptor.startListening();
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        claimedItemAdaptor.stopListening();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        claimedItemAdaptor.notifyDataSetChanged();
-    }
 }

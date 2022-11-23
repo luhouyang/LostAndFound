@@ -2,8 +2,8 @@
   <library name="Gradle: com.firebaseui:firebase-ui-firestore:8.0.1@aar">
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cae6b7c8cf93667793443d400fda7857/transformed/firebase-ui-firestore-8.0.1/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/ae97ed46fc369757acd8da8e961191f1/transformed/firebase-ui-firestore-8.0.1/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ae97ed46fc369757acd8da8e961191f1/transformed/firebase-ui-firestore-8.0.1/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/4a2941a24e4879ba19114728c763dd87/transformed/firebase-ui-firestore-8.0.1/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4a2941a24e4879ba19114728c763dd87/transformed/firebase-ui-firestore-8.0.1/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.firebaseui/firebase-ui-firestore/8.0.1/7ebed2e64cb43d0217ae8b437fb394786241110e/firebase-ui-firestore-8.0.1-javadoc.jar!/" />

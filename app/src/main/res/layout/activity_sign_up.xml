@@ -30,27 +30,30 @@
             android:id="@+id/organization_clickable_text_view"
             android:layout_below="@+id/sign_up"
             android:textSize="36dp"
+            android:layout_marginVertical="12dp"
             android:padding="8dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/item_type_layout"
+            android:id="@+id/organization_layout"
             android:layout_below="@+id/sign_up"
             android:background="@drawable/rounded_corner"
             android:backgroundTint="@color/teal_200"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center"
+            android:layout_marginVertical="12dp"
             android:padding="8dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/organization_text_view"
                 android:text="Organization"
                 android:textSize="24dp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:gravity="center"
                 />
 
             <ImageButton
@@ -62,10 +65,48 @@
 
         </LinearLayout>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/identification_clickable_text_view"
+            android:layout_below="@+id/organization_layout"
+            android:textSize="36dp"
+            android:padding="8dp"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/item_type_layout"
+            android:id="@+id/identification_layout"
+            android:layout_below="@+id/organization_layout"
+            android:background="@drawable/rounded_corner"
+            android:backgroundTint="@color/teal_200"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/identification_text_view"
+                android:text="Identification"
+                android:textSize="24dp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                />
+
+            <ImageButton
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:id="@+id/identification_drop_down"
+                android:background="@drawable/ic_baseline_arrow_drop_down_24"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/identification_layout"
             android:id="@+id/enter_sign_up_info"
             android:orientation="vertical"
             android:layout_marginVertical="4dp">

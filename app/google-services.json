@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:367953457761:android:e344660f0fb3443db5f020",
         "android_client_info": {
-          "package_name": "com.example.lostfound"
+          "package_name": "com.lostandfound.lostfound"
         }
       },
       "oauth_client": [
@@ -17,7 +17,7 @@
           "client_id": "367953457761-b8onug9hv807qcdfppigidi512gfujrg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.lostfound",
+            "package_name": "com.lostandfound.lostfound",
             "certificate_hash": "9120576b619a983782f0fe385780c28b725b6eda"
           }
         },

@@ -64,7 +64,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 101;
     private String imageUriStr;
-    private boolean clicked;
+    private boolean clicked, photoUpload, infoUpload;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +83,8 @@ public class ReportLostItemActivity extends AppCompatActivity {
 
         imageUriStr = "NO_URI";
         clicked = false;
+        photoUpload = false;
+        infoUpload = false;
 
         imageUri = null;
 
@@ -186,6 +188,12 @@ public class ReportLostItemActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         pd.dismiss();
                         Utility.showToast(ReportLostItemActivity.this, "Image Uploaded");
+                        photoUpload = true;
+                        if(photoUpload && infoUpload){
+                            GlobalVariables.reportedItem = true;
+                            Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
+                            finish();
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -237,12 +245,15 @@ public class ReportLostItemActivity extends AppCompatActivity {
                             @Override
                             public void onEvent(@Nullable DocumentSnapshot reporterDocumentSnapshot, @Nullable FirebaseFirestoreException error) {
                                 int credits = reporterDocumentSnapshot.getLong("credits").intValue();
-                                credits += 1;
-                                GlobalVariables.userDataDocRef.update("credits", credits);
+                                GlobalVariables.credits = credits;
+                                infoUpload = true;
+                                if(photoUpload && infoUpload){
+                                    GlobalVariables.reportedItem = true;
+                                    Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
+                                    finish();
+                                }
                             }
                         });
-                        Utility.showToast(ReportLostItemActivity.this, "Successfully reported item");
-                        finish();
                     })
                     .addOnFailureListener(v-> {
                         Utility.showToast(ReportLostItemActivity.this, v.getLocalizedMessage());
@@ -305,8 +316,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
             listPermissionsNeeded.add(Manifest.permission.CAMERA);
         }
         if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded
-                    .add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            listPermissionsNeeded.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         }
         if (!listPermissionsNeeded.isEmpty()) {
             ActivityCompat.requestPermissions(context, listPermissionsNeeded

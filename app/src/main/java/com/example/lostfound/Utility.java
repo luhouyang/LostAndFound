@@ -41,6 +41,10 @@ public class Utility {
         return FirebaseFirestore.getInstance().collection("user-data").document(currentUser.getUid());
     }
 
+    static DocumentReference getDocumentReferenceGeneralData(String docRef){
+        return FirebaseFirestore.getInstance().collection("general-data").document(docRef);
+    }
+
     // Return image URI in local storage
     static Uri getImageUri(Context inContext, Bitmap inImage) {
         ByteArrayOutputStream bytes = new ByteArrayOutputStream();

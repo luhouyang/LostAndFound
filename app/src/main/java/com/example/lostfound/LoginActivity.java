@@ -34,6 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //staff or student
         GlobalVariables.checkPattern = Pattern.compile("[A-Z]{2}[0-9]{10}");
 
         nameEditText = findViewById(R.id.login_name_edit_text);
@@ -82,10 +83,14 @@ public class LoginActivity extends AppCompatActivity {
                             GlobalVariables.matrixNo = userData.getString("matrixNo");
                             GlobalVariables.key = userData.getString("key");
                             GlobalVariables.organization = userData.getString("organization");
+                            GlobalVariables.identification = userData.getString("identification");
+                            //GlobalVariables.userCodeNo = userData.getString("userCodeNo");
+                            GlobalVariables.credits = userData.getLong("credits").intValue();
                         }
                     });
                     GlobalVariables.firebaseStorage = FirebaseStorage.getInstance();
                     GlobalVariables.storageReference = GlobalVariables.firebaseStorage.getReference();
+                    GlobalVariables.reportedItem = false;
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();
