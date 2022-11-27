@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     EditText nameEditText, matrixNoEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     Button createAccountButton;
-    TextView organizationClickableTextView, identificationClickableTextView, organizationTextView, identificationTextView, loginButtonTextView;
+    TextView identificationClickableTextView, organizationTextView, identificationTextView, loginButtonTextView;
     ProgressBar progressBar;
 
     private int credits = 0;
@@ -45,17 +45,15 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.sign_up_password_edit_text);
         confirmPasswordEditText = findViewById(R.id.sign_up_confirm_password_edit_text);
         createAccountButton = findViewById(R.id.create_account_btn);
-        organizationClickableTextView = findViewById(R.id.organization_clickable_text_view);
         identificationClickableTextView = findViewById(R.id.identification_clickable_text_view);
         organizationTextView = findViewById(R.id.organization_text_view);
         identificationTextView = findViewById(R.id.identification_text_view);
         loginButtonTextView = findViewById(R.id.login_text_view_btn);
         progressBar = findViewById(R.id.progress_bar);
 
-        organizationClickableTextView.setOnClickListener(v-> showDropDownMenuOrganization());
+        organizationTextView.setOnClickListener(v-> showDropDownMenuOrganization());
         identificationClickableTextView.setOnClickListener(v-> showDropDownMenuIdentification());
         createAccountButton.setOnClickListener(v-> createAccount());
-        //createAccountButton.setOnClickListener(v-> debug());
 
         loginButtonTextView.setOnClickListener(v-> {
             startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
@@ -64,7 +62,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     void showDropDownMenuOrganization(){
-        PopupMenu popupMenu = new PopupMenu(SignUpActivity.this, organizationClickableTextView);
+        PopupMenu popupMenu = new PopupMenu(SignUpActivity.this, organizationTextView);
         popupMenu.getMenu().add("Kolej Matrikulasi Labuan");
         popupMenu.getMenu().add("Kolej Matrikulasi Kelantan");
         popupMenu.getMenu().add("Kolej Matrikulasi Johor");
@@ -168,20 +166,6 @@ public class SignUpActivity extends AppCompatActivity {
         }
     }
 
-    void debug(){
-        DocumentReference doc = Utility.getDocumentReferenceGeneralData("user_code_no");
-        doc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                int codeN = value.getLong("numberOfUsers").intValue();
-                codeN += 1;
-                GlobalVariables.userCodeNo = String.valueOf(codeN);
-            }
-        });
-        DocumentReference temp = Utility.getDocumentReferenceGeneralData("temp");
-        temp.update("tempUserCode", Integer.valueOf(GlobalVariables.userCodeNo));
-    }
-
     void createAccountInFirebase(String name, String identificationNo, String email, String password){
         changeProgressBar(true);
 
@@ -194,7 +178,6 @@ public class SignUpActivity extends AppCompatActivity {
                 UserData userData = new UserData();
                 userData.setOrganization(GlobalVariables.organization);
                 userData.setIdentification(GlobalVariables.identification);
-                userData.setUserCodeNo(GlobalVariables.userCodeNo);
                 userData.setName(name);
                 userData.setMatrixNo(identificationNo);
                 userData.setCredits(credits);
@@ -213,7 +196,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     boolean isValidated(String organization, String identification, String name, String identificationNo, String email, String password, String confirmPassword){
-        if(Objects.equals(organization, "Organization")){
+        if(Objects.equals(organization, "Select Organization")){
             organizationTextView.setError("Pick an organization");
             return false;
         }

@@ -129,19 +129,21 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
                 String price = estimatePriceEditText.getText().toString();
                 if (isValid(nameEditText.getText().toString(), tutorial, price)) {
                     DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
-                    claimedItemDocRef.update("status", "reported").addOnSuccessListener(q ->
-                            GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                                @Override
-                                public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
-                                    claimedItemDocRef.update("complainUserID", GlobalVariables.currentUserID);
-                                    claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));
-                                    claimedItemDocRef.update("matrixNoOfComplain", complainUserDataSnapshot.getString("matrixNo"));
-                                    claimedItemDocRef.update("complainPrice", price);
-                                    claimedItemDocRef.update("tutorialComplain", tutorial);
-                                    claimedItemDocRef.update("timestampComplained", timestampReportClaimed);
-                                    Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
-                                }
-                            }));
+                    claimedItemDocRef.update("status", "reported").addOnSuccessListener(q -> {
+                        GlobalVariables.userDataDocRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                            @Override
+                            public void onEvent(@Nullable DocumentSnapshot complainUserDataSnapshot, @Nullable FirebaseFirestoreException error) {
+                                claimedItemDocRef.update("complainUserID", GlobalVariables.currentUserID);
+                                claimedItemDocRef.update("nameOfComplain", complainUserDataSnapshot.getString("name"));
+                                claimedItemDocRef.update("matrixNoOfComplain", complainUserDataSnapshot.getString("matrixNo"));
+                                claimedItemDocRef.update("complainPrice", price);
+                                claimedItemDocRef.update("tutorialComplain", tutorial);
+                                claimedItemDocRef.update("timestampComplained", timestampReportClaimed);
+                                Utility.showToast(ViewClaimedItemActivity.this, "Successfully reported");
+                            }
+                        });
+                        GlobalVariables.complainItem = true;
+                    });
                     finish();
                 }
             });

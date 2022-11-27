@@ -28,6 +28,7 @@ public class ClaimedItemActivity extends AppCompatActivity {
     ImageButton itemTypeDropDownBtn;
     ClaimedItemAdaptor claimedItemAdaptor;
 
+    private String previousItemType;
     private boolean adminView;
 
     @Override
@@ -99,40 +100,36 @@ public class ClaimedItemActivity extends AppCompatActivity {
     }
 
     void setUpRecyclerView(String itemType){
-        //Query query = Utility.getCollectionReferenceClaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
-        //FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
-        //        .setQuery(query, LostItem.class).build();
-        //recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-        //claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
-        //recyclerView.setAdapter(claimedItemAdaptor);
-        //claimedItemAdaptor.startListening();
-        //claimedItemAdaptor.notifyDataSetChanged();
-
         Query query = Utility.getCollectionReferenceClaimed(itemType).orderBy("timestampReported", Query.Direction.DESCENDING);
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot querySnapshot, @Nullable FirebaseFirestoreException error) {
-                if (querySnapshot.size()!=0){
-                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
-                            .setQuery(query, LostItem.class).build();
-                    recyclerView.setLayoutManager(new GridLayoutManager(ClaimedItemActivity.this, 2));
-                    claimedItemAdaptor = new ClaimedItemAdaptor(options, ClaimedItemActivity.this, GlobalVariables.key, adminView);
-                    recyclerView.setAdapter(claimedItemAdaptor);
-                    claimedItemAdaptor.startListening();
-                    claimedItemAdaptor.notifyDataSetChanged();
-                    recyclerView.setVisibility(View.VISIBLE);
-                }else{
-                    Query defaultQuery = Utility.getCollectionReferenceClaimed("Place-Holder").orderBy("timestampReported", Query.Direction.DESCENDING);
-                    FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
-                            .setQuery(defaultQuery, LostItem.class).build();
-                    recyclerView.setLayoutManager(new GridLayoutManager(ClaimedItemActivity.this, 2));
-                    claimedItemAdaptor = new ClaimedItemAdaptor(options, ClaimedItemActivity.this, GlobalVariables.key, adminView);
-                    recyclerView.setAdapter(claimedItemAdaptor);
-                    recyclerView.setVisibility(View.GONE);
-                }
-            }
-        });
+        FirestoreRecyclerOptions<LostItem> options = new FirestoreRecyclerOptions.Builder<LostItem>()
+                .setQuery(query, LostItem.class).build();
+        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        claimedItemAdaptor = new ClaimedItemAdaptor(options, this, GlobalVariables.key, adminView);
+        recyclerView.setAdapter(claimedItemAdaptor);
+        claimedItemAdaptor.startListening();
+        claimedItemAdaptor.notifyDataSetChanged();
+
+        previousItemType = itemType;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        claimedItemAdaptor.startListening();
+    }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        claimedItemAdaptor.stopListening();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        claimedItemAdaptor.stopListening();
+        setUpRecyclerView(previousItemType);
+        claimedItemAdaptor.startListening();
+        claimedItemAdaptor.notifyDataSetChanged();
+    }
 }

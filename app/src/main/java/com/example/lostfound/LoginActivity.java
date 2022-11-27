@@ -91,6 +91,7 @@ public class LoginActivity extends AppCompatActivity {
                     GlobalVariables.firebaseStorage = FirebaseStorage.getInstance();
                     GlobalVariables.storageReference = GlobalVariables.firebaseStorage.getReference();
                     GlobalVariables.reportedItem = false;
+                    GlobalVariables.complainItem = false;
 
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     finish();

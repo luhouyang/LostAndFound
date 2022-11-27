@@ -4,7 +4,6 @@ public class UserData {
     String name;
     String organization;
     String matrixNo;
-    String userCodeNo;
     String identification;
     int credits;
 
@@ -33,14 +32,6 @@ public class UserData {
 
     public void setMatrixNo(String matrixNo) {
         this.matrixNo = matrixNo;
-    }
-
-    public String getUserCodeNo() {
-        return userCodeNo;
-    }
-
-    public void setUserCodeNo(String userCodeNo) {
-        this.userCodeNo = userCodeNo;
     }
 
     public String getIdentification() {

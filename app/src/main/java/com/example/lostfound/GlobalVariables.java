@@ -27,7 +27,6 @@ public class GlobalVariables extends AppCompatActivity {
     public static String name;
     public static String organization;
     public static String identification;
-    public static String userCodeNo;
     public static String matrixNo;
     public static String key;
     public static int credits;
@@ -37,5 +36,6 @@ public class GlobalVariables extends AppCompatActivity {
 
     //General
     public static boolean reportedItem;
+    public static boolean complainItem;
 
 }
