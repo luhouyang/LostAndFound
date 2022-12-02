@@ -145,6 +145,7 @@ public class ReportLostItemActivity extends AppCompatActivity {
                 addLostItemToDatabase();
             }
         });
+
         setUpRecyclerView("Place-Holder");
     }
 

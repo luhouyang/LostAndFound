@@ -84,7 +84,6 @@ public class LoginActivity extends AppCompatActivity {
                             GlobalVariables.key = userData.getString("key");
                             GlobalVariables.organization = userData.getString("organization");
                             GlobalVariables.identification = userData.getString("identification");
-                            //GlobalVariables.userCodeNo = userData.getString("userCodeNo");
                             GlobalVariables.credits = userData.getLong("credits").intValue();
                         }
                     });
