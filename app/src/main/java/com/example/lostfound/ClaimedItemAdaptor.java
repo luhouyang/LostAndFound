@@ -58,7 +58,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
         holder.placeTextView.setText(lostItem.place);
         holder.contactInfoTextView.setText(lostItem.contactInfo);
 
-        if (lostItem.status.equals("reported")){
+        if(lostItem.status.equals("reported")){
             int red = ContextCompat.getColor(this.context, R.color.red_bright);
             holder.linearLayout.setBackgroundColor(red);
             if (Objects.equals(this.key, "admin") && this.adminView){
@@ -70,12 +70,16 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
                     intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
                     intent.putExtra("place", lostItem.place);
                     intent.putExtra("contactInfo", lostItem.contactInfo);
+                    intent.putExtra("claimerID", lostItem.claimerUserID);
                     String docID = this.getSnapshots().getSnapshot(position).getId();
                     intent.putExtra("docID", docID);
                     intent.putExtra("status", lostItem.status);
                     context.startActivity(intent);
                 });
             }
+        }else if(lostItem.status.equals("resolved")){
+            int green = ContextCompat.getColor(this.context, R.color.green_bright);
+            holder.linearLayout.setBackgroundColor(green);
         }else{
             holder.itemView.setOnClickListener(v -> {
                 Intent intent = new Intent(context, ViewClaimedItemActivity.class);
@@ -85,6 +89,7 @@ public class ClaimedItemAdaptor extends FirestoreRecyclerAdapter<LostItem, Claim
                 intent.putExtra("timestampReported", Utility.timeToString(lostItem.timestampReported));
                 intent.putExtra("place", lostItem.place);
                 intent.putExtra("contactInfo", lostItem.contactInfo);
+                intent.putExtra("claimerID", lostItem.claimerUserID);
                 String docID = this.getSnapshots().getSnapshot(position).getId();
                 intent.putExtra("docID", docID);
                 intent.putExtra("status", lostItem.status);

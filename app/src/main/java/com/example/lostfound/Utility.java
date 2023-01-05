@@ -41,6 +41,10 @@ public class Utility {
         return FirebaseFirestore.getInstance().collection("user-data").document(currentUser.getUid());
     }
 
+    static DocumentReference getDocumentReferenceUserDataString(String user){
+        return FirebaseFirestore.getInstance().collection("user-data").document(user);
+    }
+
     static DocumentReference getDocumentReferenceGeneralData(String docRef){
         return FirebaseFirestore.getInstance().collection("general-data").document(docRef);
     }

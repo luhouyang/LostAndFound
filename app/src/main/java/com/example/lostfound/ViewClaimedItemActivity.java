@@ -83,6 +83,7 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
         String timestampReported = getIntent().getStringExtra("timestampReported");
         String place = getIntent().getStringExtra("place");
         String contactInfo = getIntent().getStringExtra("contactInfo");
+        String userID = getIntent().getStringExtra("claimerID");
         String docID = getIntent().getStringExtra("docID");
         String status = getIntent().getStringExtra("status");
 
@@ -100,6 +101,16 @@ public class ViewClaimedItemActivity extends AppCompatActivity {
             contactInfoReportTextView.setText(contactInfo);
 
             returnTextView.setOnClickListener(u-> {
+                finish();
+            });
+
+            verifyReportTextView.setOnClickListener(u -> {
+                DocumentReference claimedItemDocRef = Utility.getCollectionReferenceClaimed(itemType).document(docID);
+                DocumentReference claimerDataDocRef = Utility.getDocumentReferenceUserDataString(userID);
+                claimedItemDocRef.update("status", "resolved").addOnSuccessListener(q -> {
+                    claimerDataDocRef.update("credits", 0);
+                    Utility.showToast(ViewClaimedItemActivity.this, "Successfully resolved");
+                });
                 finish();
             });
         }else{

@@ -35,10 +35,10 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //staff or student
-        GlobalVariables.checkPattern = Pattern.compile("[A-Z]{2}[0-9]{10}");
+        //GlobalVariables.checkPattern = Pattern.compile("[A-Z]{2}[0-9]{10}");
 
-        nameEditText = findViewById(R.id.login_name_edit_text);
-        matrixNoEditText = findViewById(R.id.login_matrix_no_edit_text);
+        //nameEditText = findViewById(R.id.login_name_edit_text);
+        //matrixNoEditText = findViewById(R.id.login_matrix_no_edit_text);
         emailEditText = findViewById(R.id.login_email_edit_text);
         passwordEditText = findViewById(R.id.login_password_edit_text);
         loginBtn = findViewById(R.id.login_btn);
@@ -53,12 +53,12 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     void loginUser(){
-        String name  = nameEditText.getText().toString();
-        String matrixNo = matrixNoEditText.getText().toString().trim();
+        //String name  = nameEditText.getText().toString();
+        //String matrixNo = matrixNoEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString();
 
-        if(!correctLoginInfo(name, matrixNo, email, password)){
+        if(!correctLoginInfo(email, password)){
             return;
         }
 
@@ -103,15 +103,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    boolean correctLoginInfo(String name, String matrixNo, String email, String password){
-        if(Objects.equals(name, "")){
-            nameEditText.setError("Enter name");
-            return false;
-        }
-        if(!GlobalVariables.checkPattern.matcher(matrixNo).matches()){
-            matrixNoEditText.setError("Enter matrix number");
-            return false;
-        }
+    boolean correctLoginInfo(String email, String password){
         if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
             emailEditText.setError("Email is invalid");
             return false;
